@@ -14,8 +14,11 @@ from transformers import BartForConditionalGeneration, BartTokenizer
 nltk.download('punkt')
 nltk.download('punkt_tab')  # Additional component to fix the error
 
+# Enter keyword to summarize
+keyword = input("Enter the name of the Wikipedia page to summarize for: ")
+
 # Fetch Wikipedia content
-wikisearch = wikipedia.page("Birds of paradise")
+wikisearch = wikipedia.page(keyword)
 wikicontent = wikisearch.content
 
 # Summarization using Sumy (LexRank)
