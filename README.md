@@ -70,9 +70,6 @@ I'm looking to collaborate on:
 <!-- Profile Trophy -->
 ![Trophy](https://github-profile-trophy.vercel.app/?username=akshayaa-403&theme=radical&row=1&column=6)
 
-<!-- Profile Views Counter -->
-![Profile Views](https://komarev.com/ghpvc/?username=akshayaa-403&color=ff69b4)
-
 ---
 <p align="center">
   <i>Let's connect and build something amazing together!</i>
