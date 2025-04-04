@@ -1,13 +1,37 @@
 # Hi there, I'm Akshayaa! 👋
 
 ## About Me
-I'm passionate about blending technology with creativity, focusing on:
-- 🤖 Artificial Intelligence
-- 📊 Data Science
-- 🦾 Robotics
-- 🌐 Web Development
+I'm passionate about Machine Learning and AI, specializing in:
+- 🤖 Natural Language Processing
+- 📊 Predictive Analytics
+- 🎯 Sentiment Analysis
+- 🏠 Price Prediction Models
+
+## 🚀 Featured Projects
+
+### [House Price Prediction Model](https://github.com/akshayaa-403/house-price-ml)
+- 📊 Developed multiple ML models for accurate house price predictions
+- 🎯 Achieved 86% accuracy using Random Forest
+- 📈 Implemented various algorithms including Linear Regression, KNN, Decision Trees
+- 💡 Built with Python, Scikit-learn, and Jupyter Notebook
+
+### [IMDB Sentiment Analysis](https://github.com/akshayaa-403/imdb-sentiment-master)
+- 🎬 Analyzing movie reviews for sentiment classification
+- 📝 Natural Language Processing with Python
+- 📊 Jupyter Notebook implementation for detailed analysis
+
+### [Twitter Sentiment Analyzer](https://github.com/akshayaa-403/Twitter-Sentiment-Analyzer)
+- 🐦 Real-time Twitter sentiment analysis
+- 🔄 Python-based sentiment classification
+- 📊 Social media data processing and analysis
+
+### [Wikipedia Summarizer](https://github.com/akshayaa-403/Wikipedia-Summarizer)
+- 📚 Automatic text summarization of Wikipedia articles
+- 🔍 Python-based NLP implementation
+- 📝 Efficient information extraction and processing
 
 ## 💻 Tech Stack
+
 ### Programming & Development
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=Python&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat&logo=html5&logoColor=white)
@@ -32,45 +56,36 @@ I'm passionate about blending technology with creativity, focusing on:
 ![VS Code](https://img.shields.io/badge/-VS_Code-007ACC?style=flat&logo=visual-studio-code&logoColor=white)
 ![Anaconda](https://img.shields.io/badge/-Anaconda-44A833?style=flat&logo=anaconda&logoColor=white)
 
-### AI/ML Areas
-![NLP](https://img.shields.io/badge/-Natural_Language_Processing-8B4513?style=flat&logo=natural-language-processing&logoColor=white)
-![Computer Vision](https://img.shields.io/badge/-Computer_Vision-5C3EE8?style=flat&logo=opencv&logoColor=white)
-![Deep Learning](https://img.shields.io/badge/-Deep_Learning-FF6F00?style=flat&logo=tensorflow&logoColor=white)
-![GANs](https://img.shields.io/badge/-GANs-FF69B4?style=flat&logo=python&logoColor=white)
+## 🔥 Specializations
+- **Natural Language Processing**
+  - Text Classification
+  - Sentiment Analysis
+  - Text Summarization
+- **Machine Learning**
+  - Predictive Modeling
+  - Regression Analysis
+  - Classification
+- **Data Analysis**
+  - Statistical Analysis
+  - Data Visualization
+  - Feature Engineering
 
-### Robotics & IoT
-![ROS](https://img.shields.io/badge/-ROS-22314E?style=flat&logo=ros&logoColor=white)
-![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=flat&logo=arduino&logoColor=white)
-![Raspberry Pi](https://img.shields.io/badge/-Raspberry_Pi-C51A4A?style=flat&logo=raspberry-pi&logoColor=white)
+## 🌟 Recent Achievements
+- Successfully implemented machine learning models with 86% accuracy in house price prediction
+- Developed multiple NLP-based projects including sentiment analysis and text summarization
+- Created efficient data processing pipelines for social media analysis
 
-## 🤖 Project Highlights
-- **Natural Language Processing**: Specialized in text-based AI systems and language understanding
-- **Computer Vision Applications**: Developed solutions for visual recognition tasks
-- **Generative Adversarial Networks**: Implemented GANs for creative applications
-- **RUL Prediction**: Created models for Remaining Useful Life prediction in industrial applications
-- **Robotics & Automation**: Leveraging my background to create intelligent automated solutions
-
-## 🤝 Collaboration
-I'm looking to collaborate on:
-- 🧠 AI projects
-- 💻 Web development initiatives
-- ⚡ Automation solutions
+## 🤝 Looking to Collaborate On
+- 🧠 Machine Learning Projects
+- 📊 Data Science Initiatives
+- 🤖 NLP Applications
+- 📈 Predictive Analytics Solutions
 
 ## 📫 Connect With Me
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/akshayaa-kashyap/)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat&logo=Gmail&logoColor=white)](mailto:akshayaakashyap@gmail.com)
 
 ## 📊 GitHub Stats
-<!-- GitHub Stats Card -->
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=akshayaa-403&show_icons=true&theme=radical)
 
-<!-- Most Used Languages -->
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=akshayaa-403&layout=compact&theme=radical)
-
-<!-- Profile Trophy -->
 ![Trophy](https://github-profile-trophy.vercel.app/?username=akshayaa-403&theme=radical&row=1&column=6)
-
----
-<p align="center">
-  <i>Let's connect and build something amazing together!</i>
-</p>
