@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Akshayaa Kashyap</h1>
-  <h3>Passionate developer from India, blending AI, data science, and modern web technologies to build impactful solutions.</h3>
+  <h3>Passionate developer blending AI, data science, and modern web technologies to build impactful solutions.</h3>
   
   <a href="https://linkedin.com/in/akshayaa-kashyap">LinkedIn</a> • 
   <a href="https://akshayaa-403.github.io/portfolio/">Portfolio Website</a> • 
