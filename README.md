@@ -43,7 +43,7 @@ Modern, responsive portfolio with smooth scrolling, typing animation, project sh
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=akshayaa-403&theme=radical" alt="GitHub Streak" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=akshayaa-403&theme=radical&starting_year=2026&hide_total_contributions=false&hide_current_streak=false&hide_longest_streak=false" alt="GitHub Streak 2026" />
 </p>
 
 <p align="center">
