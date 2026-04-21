@@ -9,7 +9,7 @@
 
 ---
 
-## 🚀 Featured Projects
+## Featured Projects
 
 ### [Quantamental Screener](https://github.com/akshayaa-403/quantamental-screener)
 **AI-powered stock screener** blending technical analysis with news sentiment scoring. Ranks equities using momentum, sentiment, volume & volatility factors with interactive dashboards and backtesting. *(Jupyter Notebook)*
@@ -22,7 +22,7 @@ Modern, responsive portfolio with smooth scrolling, typing animation, project sh
 
 ---
 
-## 🛠️ Tech Stack & Tools
+## Tech Stack & Tools
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
@@ -40,7 +40,7 @@ Modern, responsive portfolio with smooth scrolling, typing animation, project sh
 
 ---
 
-## 📊 GitHub Stats
+## GitHub Stats
 
 <p align="center">
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=akshayaa-403&theme=radical&starting_year=2026&hide_total_contributions=false&hide_current_streak=false&hide_longest_streak=false" alt="GitHub Streak 2026" />
@@ -52,7 +52,7 @@ Modern, responsive portfolio with smooth scrolling, typing animation, project sh
 
 ---
 
-## 🌐 Connect with Me
+## Connect with Me
 
 <p align="center">
   <a href="https://linkedin.com/in/akshayaa-kashyap" target="_blank">
