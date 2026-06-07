@@ -9,44 +9,39 @@
   <a href="https://github.com/akshayaa-403"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/></a>
 </div>
 
----
 
 ## About Me
 
 I'm a passionate developer who loves transforming complex data into actionable insights and elegant user experiences. With a strong foundation in machine learning, data engineering, and full-stack development, I build solutions that are both intelligent and user-friendly.
 
-- Currently exploring LLM fine-tuning and real-time data pipelines
-- Deepening my knowledge of MLOps and cloud deployment (AWS, GCP)
-- Write technical articles on Medium
-- 2025 goal: Contribute to open-source AI projects
-- Fun fact: I love solving puzzles and playing chess in my free time
-
----
 
 ## Featured Projects
 
-### Quantamental Screener
-AI-powered stock screener blending technical analysis with real-time news sentiment.  
-- Ranks equities using momentum, sentiment, volume & volatility factors  
-- Interactive Streamlit dashboard + backtesting engine  
-- Tech: Python, Pandas, Transformers, Streamlit, yfinance  
-![Jupyter Notebook](https://img.shields.io/badge/Notebook-Jupyter-orange?logo=jupyter)
+### [Quantamental Screener](https://github.com/akshayaa-403/quantamental-screener) 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 
-### Yosemite Image Translation GAN
+AI-powered stock screener blending technical analysis with real-time news sentiment.
+- Ranks equities using momentum, sentiment, volume & volatility factors
+- Interactive Streamlit dashboard + backtesting engine
+- Tech: Python, Pandas, Transformers, Streamlit, yfinance
+
+### [Yosemite Image Translation GAN](https://github.com/akshayaa-403/yosemite-image-translation-gan)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+
 Generative Adversarial Network for unpaired image-to-image translation on Yosemite landscapes (summer to winter).  
 - Implemented CycleGAN architecture with residual blocks  
 - Achieved realistic domain transfer with cycle consistency loss  
 - Tech: PyTorch, Torchvision, Matplotlib  
-![PyTorch](https://img.shields.io/badge/Framework-PyTorch-red?logo=pytorch)
 
-### Portfolio Website
+### [Portfolio Website](https://github.com/akshayaa-403/portfolio)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+
 Modern, fully responsive personal portfolio with smooth interactions.  
 - Typing animation, project gallery, contact form, mobile-first design  
 - Deployed via GitHub Pages  
-- Tech: HTML5, CSS3, JavaScript, FontAwesome  
-![HTML5](https://img.shields.io/badge/Frontend-HTML/CSS/JS-orange)
-
-Check out more projects in my repositories.
+- Tech: HTML5, CSS3, JavaScript, FontAwesome
 
 ---
 
@@ -98,10 +93,6 @@ Check out more projects in my repositories.
 
 <p align="center">
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=akshayaa-403&theme=radical&hide_border=true" alt="Activity Graph" width="90%"/>
-</p>
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=akshayaa-403&layout=compact&theme=radical&hide_border=true" alt="Top Languages" />
 </p>
 
 ---
