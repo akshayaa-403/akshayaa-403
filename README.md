@@ -43,8 +43,6 @@ Modern, fully responsive personal portfolio with smooth interactions.
 - Deployed via GitHub Pages  
 - Tech: HTML5, CSS3, JavaScript, FontAwesome
 
----
-
 ## Tech Stack & Tools
 
 ### Languages & Databases
@@ -83,8 +81,6 @@ Modern, fully responsive personal portfolio with smooth interactions.
 ![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 ![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
----
-
 ## GitHub Insights
 
 <p align="center">
@@ -94,8 +90,6 @@ Modern, fully responsive personal portfolio with smooth interactions.
 <p align="center">
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=akshayaa-403&theme=radical&hide_border=true" alt="Activity Graph" width="90%"/>
 </p>
-
----
 
 ## Connect with Me
 
