@@ -14,6 +14,8 @@
 
 I'm a passionate developer who loves transforming complex data into actionable insights and elegant user experiences. With a strong foundation in machine learning, data engineering, and full-stack development, I build solutions that are both intelligent and user-friendly.
 
+As a Software Engineer with AI specialist experience, I've delivered a lead scoring system that increased sales team efficiency and raised conversion rates by 15%. I build CRM dashboards, LLM pipelines, and web scrapers using Python, SQL, and modern web technologies — turning messy data into clear insights that drive business decisions.
+
 
 ## Featured Projects
 
@@ -21,35 +23,36 @@ I'm a passionate developer who loves transforming complex data into actionable i
 ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 
 AI-powered stock screener blending technical analysis with real-time news sentiment.
-- Ranks equities using momentum, sentiment, volume & volatility factors
-- Interactive Streamlit dashboard + backtesting engine
-- Tech: Python, Pandas, Transformers, Streamlit, yfinance
+- Ranks equities using momentum, volume, volatility, and sentiment from FinBERT
+- Interactive Streamlit dashboard for viewing results and exploring rankings
+- Tech: Python, Pandas, scikit-learn, Transformers, Streamlit, yfinance, NewsAPI
 
-### [Yosemite Image Translation GAN](https://github.com/akshayaa-403/yosemite-image-translation-gan)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
-
-Generative Adversarial Network for unpaired image-to-image translation on Yosemite landscapes (summer to winter).  
-- Implemented CycleGAN architecture with residual blocks  
-- Achieved realistic domain transfer with cycle consistency loss  
-- Tech: PyTorch, Torchvision, Matplotlib  
-
-### [Portfolio Website](https://github.com/akshayaa-403/portfolio)
+### [Ant Colony Task Scheduler](https://github.com/akshayaa-403/anttodo)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 
-Modern, fully responsive personal portfolio with smooth interactions.  
-- Typing animation, project gallery, contact form, mobile-first design  
-- Deployed via GitHub Pages  
-- Tech: HTML5, CSS3, JavaScript, FontAwesome
+Visual task scheduler using Ant Colony Optimization to find optimal daily task order.
+- Interactive visualization where ants solve a Traveling Salesman Problem in real-time
+- Users can adjust ant count, iterations, and pheromone settings
+- Tech: JavaScript, HTML5 Canvas
+
+### [Wikipedia Summarizer](https://github.com/akshayaa-403/Wikipedia-Summarizer)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+
+Tool that condenses long Wikipedia articles into short, coherent summaries.
+- Uses Transformer-based models and NLTK for text processing
+- Evaluates summary quality with ROUGE metrics
+- Addresses context preservation across long text documents
+- Tech: Python, NLTK, Transformers, ROUGE
 
 ## Tech Stack & Tools
 
 ### Languages & Databases
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 ### Data Science & ML
 ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
@@ -66,17 +69,23 @@ Modern, fully responsive personal portfolio with smooth interactions.
 ![Seaborn](https://img.shields.io/badge/Seaborn-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![Tableau](https://img.shields.io/badge/Tableau-E97627?style=for-the-badge&logo=tableau&logoColor=white)
 
 ### Web & Frameworks
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 
 ### Dev & Deployment
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white)
 ![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)
 ![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-3776AB?style=for-the-badge&logo=python&logoColor=white)
