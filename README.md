@@ -41,9 +41,8 @@ Visual task scheduler that uses Ant Colony Optimization to solve your daily task
 - Built purely with vanilla JavaScript and HTML5 Canvas
 
 ### [Wikipedia Summarizer](https://github.com/akshayaa-403/Wikipedia-Summarizer)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![Transformers](https://img.shields.io/badge/Transformers-FFD21E?style=flat&logo=huggingface&logoColor=black)
-![NLTK](https://img.shields.io/badge/NLTK-3776AB?style=flat&logo=python&logoColor=white)
 ![ROUGE](https://img.shields.io/badge/ROUGE-FF6F00?style=flat&logo=readthedocs&logoColor=white)
 
 Condenses long Wikipedia articles into concise, coherent summaries.
