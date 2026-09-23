@@ -116,7 +116,7 @@ def fit(s, width, size):  # monospace: a glyph is ~0.6em wide
 # ---------------------------------------------------------------- header
 def header():
     W, H = 880, 198
-    socials = [('GitHub', 'github.com/akshayaa-403'), ('LinkedIn', 'linkedin.com/in/akshayaa-kashyap'),
+    socials = [('Substack', 'akshayaakashyap.substack.com'), ('LinkedIn', 'linkedin.com/in/akshayaa-kashyap'),
                ('Portfolio', 'akshayaa-403.github.io/portfolio'), ('Email', 'akshayaakashyap5@gmail.com')]
     b = [text(20, 38, 'Akshayaa Kashyap', size=24, extra=' font-weight="600"'),
          text(20 + 17 * 14.4, 38, '@akshayaa-403', 'a', 24),

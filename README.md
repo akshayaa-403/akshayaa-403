@@ -1,4 +1,4 @@
-<a href="https://akshayaa-403.github.io/portfolio/"><img src="assets/header.svg" width="100%" alt="Akshayaa Kashyap (@akshayaa-403), AI Engineer, AI & data, India. GitHub akshayaa-403, LinkedIn akshayaa-kashyap, portfolio akshayaa-403.github.io/portfolio, email akshayaakashyap5@gmail.com. 408 contributions in 2026 so far, 170 public commits, 64% of them after 8 pm IST."></a>
+<a href="https://akshayaa-403.github.io/portfolio/"><img src="assets/header.svg" width="100%" alt="Akshayaa Kashyap (@akshayaa-403), AI Engineer, AI & data, India. Substack akshayaakashyap.substack.com, LinkedIn akshayaa-kashyap, portfolio akshayaa-403.github.io/portfolio, email akshayaakashyap5@gmail.com. 408 contributions in 2026 so far, 170 public commits, 64% of them after 8 pm IST."></a>
 
 <p align="center">
   <img src="assets/ring.svg" width="49%" alt="The 2026 contributions drawn as a ring: weeks clockwise from 1 January at the top, Sunday innermost, filling in week by week. The busiest day was 8 March 2026, with 41.">
@@ -371,6 +371,6 @@ A denoising pipeline for phase-contrast microscopy — PyTorch, OpenCV, a Gradio
 
 Also built: [Project IVY](https://github.com/akshayaa-403/o3_slack_bot) · [Ant Colony Task Scheduler](https://github.com/akshayaa-403/anttodo) · [Wikipedia Summarizer](https://github.com/akshayaa-403/Wikipedia-Summarizer). The full case studies are on the [portfolio](https://akshayaa-403.github.io/portfolio/).
 
-**Elsewhere:** [Portfolio](https://akshayaa-403.github.io/portfolio/) · [LinkedIn](https://linkedin.com/in/akshayaa-kashyap) · [akshayaakashyap5@gmail.com](mailto:akshayaakashyap5@gmail.com)
+**Elsewhere:** [Portfolio](https://akshayaa-403.github.io/portfolio/) · [Substack](https://akshayaakashyap.substack.com) · [LinkedIn](https://linkedin.com/in/akshayaa-kashyap) · [akshayaakashyap5@gmail.com](mailto:akshayaakashyap5@gmail.com)
 
 <sub>2026 only. Snapshot of 23 Sep 2026, drawn from the GitHub API, the public contribution calendar and each repo's own imports. Commit times are in IST. Regenerate with <code>python build.py</code>.</sub>
