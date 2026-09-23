@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="GitHub almanac for akshayaa-403: contributions as a ring, a commit clock, repo lifelines and a stack grid built from real imports.">
+<title>akshayaa-403 Almanac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600&display=swap">
+<link rel="stylesheet" href="almanac.css">
+<style>body{margin:0}</style>
+</head>
+<body>
+<!-- Each panel is one component: data-component names the file in
+     components/ that draws it. The ids are the README's deep links
+     (…/almanac/#clock, …/almanac/?repo=Habita#words). -->
+<div class="app">
+  <header class="top">
+    <div class="id">
+      <h1>Akshayaa Kashyap <span>@akshayaa-403</span></h1>
+      <p>India · on GitHub since 13 Jun 2023 · open to hire</p>
+    </div>
+    <dl class="figs" data-component="figures"></dl>
+    <nav class="links" aria-label="Profiles">
+      <a href="https://github.com/akshayaa-403" rel="noreferrer">GitHub</a>
+      <a href="https://akshayaa-403.github.io/portfolio/" rel="noreferrer">Portfolio</a>
+      <a href="https://linkedin.com/in/akshayaa-kashyap" rel="noreferrer">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main class="grid">
+    <section class="p p-ring" id="ring" data-component="ring"></section>
+    <section class="p p-clock" id="clock" data-component="clock"></section>
+    <section class="p p-life" id="lifelines" data-component="lifelines"></section>
+    <section class="p p-stack" id="stack" data-component="stack"></section>
+    <section class="p p-readme" id="readme" data-component="readme-vs-code"></section>
+    <section class="p p-words" id="words" data-component="words"></section>
+  </main>
+  <noscript><p>The panels need JavaScript. The same figures are drawn as images on the <a href="https://github.com/akshayaa-403">GitHub profile</a>.</p></noscript>
+
+  <footer class="colophon">
+    <span>Snapshot 23 Sep 2026 · GitHub REST API, the public contribution calendar, and each repo's imports and requirements files.</span>
+    <span>Commit times are author timestamps, shown in IST (UTC+5:30). Press Esc to clear a filter.</span>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="core.js"></script>
+<script src="components/figures.js"></script>
+<script src="components/ring.js"></script>
+<script src="components/clock.js"></script>
+<script src="components/lifelines.js"></script>
+<script src="components/stack.js"></script>
+<script src="components/readme-vs-code.js"></script>
+<script src="components/words.js"></script>
+<script>Almanac.mount();</script>
+</body>
+</html>

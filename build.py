@@ -4,7 +4,8 @@ GitHub strips scripts and stylesheets from a README but renders SVG images,
 and an SVG may carry its own <style> -- so each panel themes itself with
 prefers-color-scheme and animates with CSS, with no JavaScript anywhere.
 
-    python build.py        # writes assets/*.svg
+    python build.py        # writes assets/*.svg, assets/repo/*.svg, almanac/data.js
+                           # and the per-repo <details> in README.md
 """
 import json, math, re, datetime as dt
 from collections import Counter
@@ -168,15 +169,18 @@ def ring():
 
 
 # ---------------------------------------------------------------- clock
-def clock():
+def clock(commits=COMMITS, name='clock', label=''):
     W, H, cx, cy = 436, 476, 218, 206
     R0, R1 = 60, 146
+    hours = Counter(c['hour'] for c in commits)
+    late = round(100 * sum(c['hour'] >= 20 or c['hour'] < 4 for c in commits) / len(commits))
     mx = max(hours.values())
+    step = 2 if mx <= 6 else 5 if mx <= 15 else 10
     ln = lambda n: n / mx * (R1 - R0)
     top = max(hours, key=hours.get)
-    b = [text(16, 24, 'COMMIT CLOCK', 'h'), text(W - 16, 24, 'IST · shaded 20:00–04:00', 'm', 10, 'end'),
+    b = [text(16, 24, 'COMMIT CLOCK', 'h'), text(W - 16, 24, f'{label} · IST' if label else 'IST · shaded 20:00–04:00', 'a' if label else 'm', 10, 'end'),
          f'<path class="nightband" d="{sector(cx, cy, R0, R1 + 4, 300, 420)}"/>']
-    for v in range(10, mx + 1, 10):
+    for v in range(step, mx + 1, step):
         b += [f'<circle class="rule" cx="{cx}" cy="{cy}" r="{R0 + ln(v):.1f}" stroke-dasharray="2 3" stroke-width=".7"/>',
               text(cx + 3, cy - R0 - ln(v) - 2, v, 'm', 8)]
     b.append(f'<circle class="rule" cx="{cx}" cy="{cy}" r="{R0}"/>')
@@ -192,13 +196,13 @@ def clock():
     b += [text(cx, cy + 4, f'{late}%', size=28, anchor='middle', extra=' font-weight="500"'),
           text(cx, cy + 22, 'after 8 pm', 'm', 10.5, 'middle'),
           text(16, 392, f'busiest hour: {top:02}:00', 'note', 12)]
-    wd = Counter(date(c['date']).weekday() for c in COMMITS)
+    wd = Counter(date(c['date']).weekday() for c in commits)
     wmx, bw = max(wd.values()), (W - 32 - 6 * 6) / 7
     for k in range(7):
         x, hgt = 16 + k * (bw + 6), wd.get(k, 0) / wmx * 44
         b += [f'<rect class="{"l2" if k > 4 else "l3"}" x="{x:.1f}" y="{448 - hgt:.1f}" width="{bw:.1f}" height="{hgt:.1f}" rx="2"><title>{WD[k]}: {wd.get(k, 0)}</title></rect>',
               text(x + bw / 2, 462, WD[k][0], 'm', 9.5, 'middle')]
-    svg('clock', W, H, f'Commits by hour of day in IST: {late}% land after 8 pm, the busiest hour is {top:02}:00.', b)
+    svg(name, W, H, f'Commits{" to " + label if label else ""} by hour of day in IST: {late}% land after 8 pm, the busiest hour is {top:02}:00.', b)
 
 
 # ---------------------------------------------------------------- lifelines
@@ -283,16 +287,16 @@ NORM = dict(updated='update', added='add', created='create', removed='remove', d
             fixed='fix', enhanced='enhance', refactored='refactor', implemented='implement', updates='update')
 
 
-def words():
+def words(commits=COMMITS, name='words', label=''):
     W, H = 436, 420
     f = Counter()
-    for c in COMMITS:
+    for c in commits:
         m = re.search(r'[A-Za-z]+', CONV.sub('', c['msg']))
         if m:
             f[NORM.get(m.group().lower(), m.group().lower())] += 1
     top = f.most_common(9)
     mx = top[0][1]
-    b = [text(16, 24, 'HOW THE COMMITS ARE WRITTEN', 'h')]
+    b = [text(16, 24, 'HOW THE COMMITS ARE WRITTEN', 'h')] + ([text(W - 16, 24, label, 'a', 10, 'end')] if label else [])
     x, y, lh = 16, 62, 0
     for w, n in top:
         size = 11 + 19 * math.sqrt(n / mx)
@@ -304,21 +308,73 @@ def words():
               text(x + len(w) * size * .6 + 2, y - size * .55, n, 'm', 9)]
         x += wd + 12
     y += 24
-    bw = (W - 32) / len(COMMITS)
-    for k, c in enumerate(COMMITS):
+    bw = (W - 32) / len(commits)
+    for k, c in enumerate(commits):
         b.append(f'<rect class="{"hot" if CONV.match(c["msg"]) else "l1"}" x="{16 + k * bw:.2f}" y="{y}" width="{max(bw - .6, .6):.2f}" height="16"/>')
-    conv = [c for c in COMMITS if CONV.match(c['msg'])]
-    b += [text(16, y + 30, short(COMMITS[0]['date']), 'm', 10), text(W - 16, y + 30, short(COMMITS[-1]['date']), 'm', 10, 'end'),
-          text(W / 2, y + 30, f'{round(100 * len(conv) / len(COMMITS))}% “feat:/fix:” since {short(conv[0]["date"])}', 'hot', 10, 'middle')]
+    conv = [c for c in commits if CONV.match(c['msg'])]
+    since = f' since {short(conv[0]["date"])}' if conv else ''
+    b += [text(16, y + 30, short(commits[0]['date']), 'm', 10), text(W - 16, y + 30, short(commits[-1]['date']), 'm', 10, 'end'),
+          text(W / 2, y + 30, f'{round(100 * len(conv) / len(commits))}% “feat:/fix:”{since}', 'hot', 10, 'middle')]
     y += 58
     b.append(text(16, y, 'LATEST', 'h'))
-    for c in reversed(COMMITS[-9:]):
+    for c in reversed(commits[-9:]):
         y += 19
         stamp = f'{short(c["date"])} {c["t"][11:]}'
-        b += [text(16, y, stamp, 'm', 10.5), text(142, y, fit(f'{c["repo"]}  {c["msg"]}', W - 158, 10.5), 's', 10.5)]
-    svg('words', W, H, 'The most common first words of commit messages, and the latest commits.', b)
+        b += [text(16, y, stamp, 'm', 10.5), text(142, y, fit(c['msg'] if label else f'{c["repo"]}  {c["msg"]}', W - 158, 10.5), 's', 10.5)]
+    svg(name, W, H, f'The most common first words of commit messages{" to " + label if label else ""}, and the latest commits.', b)
 
 
-for draw in (header, ring, clock, lifelines, stack, words):
+# ---------------------------------------------------------------- per repo
+# A README can't run a script, but it can open a <details>. So the live page's
+# "click a repo to filter" becomes one <details> per repo, each holding that
+# repo's own clock and words, drawn here ahead of time.
+LIVE = 'https://akshayaa-403.github.io/akshayaa-403/almanac/'
+START, END = '<!-- almanac:repos -->', '<!-- /almanac:repos -->'
+
+
+def per_repo():
+    (OUT / 'repo').mkdir(exist_ok=True)
+    rows = []
+    for r in sorted(REPOS, key=lambda r: -counts[r['name']]):
+        cs = [c for c in COMMITS if c['repo'] == r['name']]
+        if not cs:
+            continue
+        name, slug = r['name'], r['name'].lower()
+        clock(cs, f'repo/{slug}-clock', name)
+        words(cs, f'repo/{slug}-words', name)
+        tot = sum(r['langs'].values())
+        langs = ' · '.join(f'{l} {100 * n / tot:.0f}%' for l, n in sorted(r['langs'].items(), key=lambda kv: -kv[1])) or 'Markdown only'
+        late = round(100 * sum(c['hour'] >= 20 or c['hour'] < 4 for c in cs) / len(cs))
+        live = f'{LIVE}?repo={name}'
+        desc = r['desc'][0].upper() + r['desc'][1:]
+        rows.append('\n'.join([
+            '<details>',
+            f'<summary><b>{escape(name)}</b> · {len(cs)} commits · {late}% after 8 pm</summary>',
+            '',
+            f'{escape(desc)} Created {short(r["created"])}, last push {short(r["pushed"])}. {langs}.',
+            '',
+            '<p align="center">',
+            f'  <a href="{live}#clock"><img src="assets/repo/{slug}-clock.svg" width="49%" alt="Commits to {escape(name)} by hour of day, IST: {late}% after 8 pm."></a>',
+            f'  <a href="{live}#words"><img src="assets/repo/{slug}-words.svg" width="49%" alt="How the commits to {escape(name)} are written, and the latest ones."></a>',
+            '</p>',
+            '',
+            f'[Open {escape(name)} in the live almanac]({live}) · [Repository](https://github.com/akshayaa-403/{name})',
+            '</details>',
+        ]))
+    readme = HERE / 'README.md'
+    s = readme.read_text(encoding='utf8')
+    if START in s and END in s:
+        head, rest = s.split(START, 1)
+        s = head + START + '\n' + '\n'.join(rows) + '\n' + END + rest.split(END, 1)[1]
+        readme.write_text(s, encoding='utf8', newline='\n')
+
+
+def data_js():  # the live almanac reads the same data.json
+    (HERE / 'almanac' / 'data.js').write_text(
+        '/* Generated by build.py from data.json. Do not edit. */\nwindow.ALMANAC_DATA = '
+        + json.dumps(D, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf8', newline='\n')
+
+
+for draw in (header, ring, clock, lifelines, stack, words, per_repo, data_js):
     draw()
-print('wrote', ', '.join(sorted(p.name for p in OUT.glob('*.svg'))))
+print('wrote', ', '.join(sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob('*.svg'))))
