@@ -4,8 +4,8 @@ GitHub strips scripts and stylesheets from a README but renders SVG images,
 and an SVG may carry its own <style> -- so each panel themes itself with
 prefers-color-scheme and animates with CSS, with no JavaScript anywhere.
 
-    python build.py        # writes assets/*.svg, assets/repo/*.svg, almanac/data.js
-                           # and the per-repo <details> in README.md
+    python build.py        # writes assets/**/*.svg and almanac/data.js, and the
+                           # generated blocks in README.md (lifelines, per-repo <details>)
 """
 import json, math, re, datetime as dt
 from collections import Counter
@@ -26,7 +26,13 @@ short = lambda s: f"{date(s).day} {MON[date(s).month - 1]} ’{s[2:4]}"
 # ---------------------------------------------------------------- data
 start = date(D['start'])
 CAL = [(start + dt.timedelta(i), n) for i, n in enumerate(D['cal'])]
-COMMITS = [dict(repo=r, t=t, date=t[:10], hour=int(t[11:13]), msg=m) for r, t, m, _ in D['commits']]
+# Everything shows the current year only: the year of the snapshot, not of the
+# clock the build runs on, so a rebuild of old data still means what it said.
+YEAR = CAL[-1][0].year
+CAL = [(d, n) for d, n in CAL if d.year == YEAR]
+COMMITS = [dict(repo=r, t=t, date=t[:10], hour=int(t[11:13]), msg=m, sha=h) for r, t, m, h in D['commits'] if t[:4] == str(YEAR)]
+Y0, Y1 = dt.date(YEAR, 1, 1), dt.date(YEAR, 12, 31)
+ACTIVE = lambda: [r for r in REPOS if counts[r['name']]]  # repos with a commit this year
 REPOS = D['repos']
 total = sum(n for _, n in CAL)
 peak_i = max(range(len(CAL)), key=lambda i: CAL[i][1])
@@ -60,7 +66,17 @@ text{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,mono
 .win{fill:var(--tint)}.nightband{fill:var(--night)}.bar{fill:var(--accent)}.bar.n{fill:var(--deep)}
 @keyframes pulse{50%{opacity:.25}}
 .pulse{animation:pulse 2.4s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+/* A README image cannot be clicked into, but its own CSS still runs. Every
+   loop below shares one @keyframes and is staggered by animation-delay, so the
+   stagger is the choreography: the ring fills clockwise and empties clockwise. */
+@keyframes fill{0%{opacity:0}3%,62%{opacity:1}65%,100%{opacity:0}}
+.fill{animation:fill 12s linear infinite both}
+@keyframes grow{0%{transform:scale(.4)}20%,84%{transform:scale(1)}97%,100%{transform:scale(.4)}}
+.grow{transform-box:view-box;transform-origin:218px 206px;animation:grow 10s cubic-bezier(.2,.7,.2,1) infinite both}
+@keyframes rise{0%{transform:scaleY(0)}20%,84%{transform:scaleY(1)}97%,100%{transform:scaleY(0)}}
+.rise{transform-box:fill-box;transform-origin:50% 100%;animation:rise 10s cubic-bezier(.2,.7,.2,1) infinite both}
+.fr{opacity:0}.fr0{opacity:1}
+@media (prefers-reduced-motion:reduce){.pulse,.fill,.grow,.rise,.fr{animation:none}}
 </style>"""
 
 
@@ -105,8 +121,8 @@ def header():
          text(20, 60, 'AI Engineer · AI & data · India · on GitHub since 13 Jun 2023', 'm', 12),
          text(20, 82, 'I build data pipelines, LLM workflows and dashboards that turn messy data into clear decisions.', 's', 12),
          f'<line class="rule" x1="20" x2="{W - 20}" y1="100" y2="100"/>']
-    figs = [('CONTRIBUTIONS', total, 'last 12 mo'), ('ACTIVE DAYS', sum(1 for _, n in CAL if n), f'of {len(CAL)}'),
-            ('LONGEST STREAK', longest, 'days'), ('COMMITS', len(COMMITS), 'public'), ('AFTER 8 PM', f'{late}%', 'of commits')]
+    figs = [('CONTRIBUTIONS', total, f'in {YEAR}'), ('ACTIVE DAYS', sum(1 for _, n in CAL if n), f'of {len(CAL)}'),
+            ('LONGEST STREAK', longest, 'days'), ('COMMITS', len(COMMITS), f'in {YEAR}'), ('AFTER 8 PM', f'{late}%', 'of commits')]
     cw = (W - 40) / len(figs)
     for k, (lbl, v, sub) in enumerate(figs):
         x = 20 + k * cw
@@ -114,7 +130,7 @@ def header():
             b.append(f'<line class="rule" x1="{x - 14:.1f}" x2="{x - 14:.1f}" y1="114" y2="146"/>')
         b += [text(x, 122, lbl, 'h'), text(x, 144, v, size=22, extra=' font-weight="500"'),
               text(x + len(str(v)) * 13.2 + 6, 144, sub, 'm', 11)]
-    svg('header', W, H, f'Akshayaa Kashyap (@akshayaa-403): {total} contributions in the last 12 months, '
+    svg('header', W, H, f'Akshayaa Kashyap (@akshayaa-403): {total} contributions in {YEAR} so far, '
         f'{len(COMMITS)} public commits, {late}% of them after 8 pm IST.', b)
 
 
@@ -122,20 +138,27 @@ def header():
 def ring():
     W, H, cx, cy = 436, 476, 218, 244
     R0, RW, GAP = 84, 13.2, 12
-    weeks = math.ceil(len(CAL) / 7)
+    OFF = (Y0.weekday() + 1) % 7  # weeks start on Sunday; the year need not
+    weeks = math.ceil((OFF + (Y1 - Y0).days + 1) / 7)
     step = (360 - GAP) / weeks
     A0 = GAP / 2
     lvl = lambda n: 0 if n == 0 else 1 if n <= 2 else 2 if n <= 5 else 3 if n <= 10 else 4 if n <= 20 else 5
 
-    def geom(i):
-        w, dow = divmod(i, 7)
+    def geom(i):  # i = day of the year, from 0
+        w, dow = divmod(i + OFF, 7)
         return R0 + dow * RW + .6, R0 + (dow + 1) * RW - .6, A0 + w * step + .35, A0 + (w + 1) * step - .35
 
-    b = [text(16, 24, 'THE YEAR, AS A RING', 'h')]
+    b = [text(16, 24, f'{YEAR}, AS A RING', 'h')]
     for i, (d, n) in enumerate(CAL):
         r1, r2, a0, a1 = geom(i)
-        b.append(f'<path class="l{lvl(n)}" d="{sector(cx, cy, r1, r2, a0, a1)}">'
+        path = sector(cx, cy, r1, r2, a0, a1)
+        if n:  # an empty cell underneath, so a day that has not filled in yet still reads as a day
+            b.append(f'<path class="l0" d="{path}"/>')
+        delay = f' style="animation-delay:{(i + OFF) // 7 / weeks * 4:.2f}s"' if n else ''
+        b.append(f'<path class="l{lvl(n)}{" fill" if n else ""}"{delay} d="{path}">'
                  f'<title>{d:%a %d %b %Y}: {n}</title></path>')
+    for i in range(len(CAL), (Y1 - Y0).days + 1):  # the days still to come
+        b.append(f'<path class="l0" opacity=".35" d="{sector(cx, cy, *geom(i))}"/>')
     r1, r2, a0, a1 = geom(peak_i)
     b.append(f'<path d="{sector(cx, cy, r1 - .8, r2 + .8, a0 - .4, a1 + .4)}" style="fill:none;stroke:var(--hot);stroke-width:1.6"/>')
     r1, r2, a0, a1 = geom(len(CAL) - 1)  # today
@@ -143,7 +166,7 @@ def ring():
     b.append(f'<circle class="hot pulse" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
     outer, last = R0 + 7 * RW, None
     for w in range(weeks):
-        d = CAL[min(w * 7, len(CAL) - 1)][0]
+        d = min(max(Y0 + dt.timedelta(w * 7 - OFF), Y0), Y1)
         if d.month == last:
             continue
         if last is not None or d.day <= 7:
@@ -157,15 +180,15 @@ def ring():
     pd, pn = CAL[peak_i]
     b += [text(cx, cy - 6, total, size=30, anchor='middle', extra=' font-weight="500"'),
           text(cx, cy + 12, 'contributions', 'm', 10.5, 'middle'),
-          text(cx, cy + 26, f'{MON[CAL[0][0].month - 1]} ’{CAL[0][0]:%y} – {MON[CAL[-1][0].month - 1]} ’{CAL[-1][0]:%y}', 'm', 10.5, 'middle'),
+          text(cx, cy + 26, f'1 Jan – {CAL[-1][0].day} {MON[CAL[-1][0].month - 1]} {YEAR}', 'm', 10.5, 'middle'),
           text(cx, cy + 46, f'loudest: {pn} on {pd.day} {MON[pd.month - 1]}', 'note', 11, 'middle')]
     lx = 16
     b.append(text(lx, H - 14, 'less', 'm', 10))
     for k in range(6):
         b.append(f'<rect class="l{k}" x="{lx + 32 + k * 14}" y="{H - 24}" width="10" height="10" rx="2"/>')
     b.append(text(lx + 32 + 6 * 14 + 4, H - 14, 'more', 'm', 10))
-    b.append(text(W - 16, H - 14, 'red dot: today', 'm', 10, 'end'))
-    svg('ring', W, H, f'Contribution calendar drawn as a ring, {total} contributions over the last 12 months; busiest day {pn} on {pd:%d %b %Y}.', b)
+    b.append(text(W - 16, H - 14, 'red dot: today · faint: still to come', 'm', 10, 'end'))
+    svg('ring', W, H, f'The {YEAR} contribution calendar drawn as a ring, {total} contributions so far; busiest day {pn} on {pd:%d %b %Y}.', b)
 
 
 # ---------------------------------------------------------------- clock
@@ -184,12 +207,15 @@ def clock(commits=COMMITS, name='clock', label=''):
         b += [f'<circle class="rule" cx="{cx}" cy="{cy}" r="{R0 + ln(v):.1f}" stroke-dasharray="2 3" stroke-width=".7"/>',
               text(cx + 3, cy - R0 - ln(v) - 2, v, 'm', 8)]
     b.append(f'<circle class="rule" cx="{cx}" cy="{cy}" r="{R0}"/>')
+    # bars grow out of the dial: scaled from its centre, masked inside it
+    b.append(f'<mask id="dial"><rect width="{W}" height="{H}" fill="#fff"/><circle cx="{cx}" cy="{cy}" r="{R0}" fill="#000"/></mask><g mask="url(#dial)">')
     for h in range(24):
         n = hours.get(h, 0)
         if n:
             night = ' n' if h >= 20 or h < 4 else ''
-            b.append(f'<path class="bar{night}" '
+            b.append(f'<path class="bar{night} grow" style="animation-delay:{h * .06:.2f}s" '
                      f'd="{sector(cx, cy, R0 + 1, R0 + 1 + ln(n), h * 15 + 1.4, h * 15 + 13.6)}"><title>{h:02}:00 – {n} commits</title></path>')
+    b.append('</g>')
     for s, a in (('00', 0), ('06', 90), ('12', 180), ('18', 270)):
         x, y = pol(cx, cy, R1 + 13, a)
         b.append(text(x, y + 3.5, s, 'm', 9.5, 'middle'))
@@ -200,57 +226,81 @@ def clock(commits=COMMITS, name='clock', label=''):
     wmx, bw = max(wd.values()), (W - 32 - 6 * 6) / 7
     for k in range(7):
         x, hgt = 16 + k * (bw + 6), wd.get(k, 0) / wmx * 44
-        b += [f'<rect class="{"l2" if k > 4 else "l3"}" x="{x:.1f}" y="{448 - hgt:.1f}" width="{bw:.1f}" height="{hgt:.1f}" rx="2"><title>{WD[k]}: {wd.get(k, 0)}</title></rect>',
+        b += [f'<rect class="{"l2" if k > 4 else "l3"} rise" style="animation-delay:{1.2 + k * .08:.2f}s" x="{x:.1f}" y="{448 - hgt:.1f}" width="{bw:.1f}" height="{hgt:.1f}" rx="2"><title>{WD[k]}: {wd.get(k, 0)}</title></rect>',
               text(x + bw / 2, 462, WD[k][0], 'm', 9.5, 'middle')]
     svg(name, W, H, f'Commits{" to " + label if label else ""} by hour of day in IST: {late}% land after 8 pm, the busiest hour is {top:02}:00.', b)
 
 
 # ---------------------------------------------------------------- lifelines
 def lifelines():
-    W, H = 880, 350
-    X0, X1 = 216, 736
-    T0, T1 = date('2025-01-01'), date('2026-10-01')
-    xp = lambda s: X0 + (date(s) - T0).days / (T1 - T0).days * (X1 - X0)
-    b = [text(16, 24, 'REPOSITORIES, LIFELINES', 'h'), text(W - 16, 24, 'each tick is a commit · shaded: the ring’s twelve months', 'm', 10, 'end'),
-         f'<rect class="win" x="{xp(D["start"]):.1f}" y="36" width="{xp(str(CAL[-1][0])) - xp(D["start"]):.1f}" height="{10 * 22 + 14}"/>']
-    for s in ('2025-01-01', '2025-04-01', '2025-07-01', '2025-10-01', '2026-01-01', '2026-04-01', '2026-07-01'):
-        b.append(text(xp(s), 48, f'’{s[2:4]}' if s[5:7] == '01' else MON[int(s[5:7]) - 1], 'm', 9.5, 'middle'))
-    b += [text(16, 48, 'repo', 'm', 9.5), text(752, 48, 'languages', 'm', 9.5), text(W - 16, 48, 'n', 'm', 9.5, 'end')]
-    for k, r in enumerate(REPOS):
-        y = 66 + k * 22
+    """Drawn as strips, one image per repo, so each row in the README can be its
+    own link into the live almanac, filtered to that repo -- the nearest a README
+    gets to clicking a row in the dashboard. Each strip is its own small panel,
+    so the gap GitHub leaves between stacked images reads as a row separator."""
+    W, X0, X1, LB, NX = 880, 216, 716, 736, 840
+    T0, T1 = Y0, Y1 + dt.timedelta(1)
+    xp = lambda s: X0 + (min(max(date(s), T0), T1) - T0).days / (T1 - T0).days * (X1 - X0)
+    # shaded: the part of the year still to come
+    wx = xp(str(CAL[-1][0] + dt.timedelta(1)))
+    ww = X1 - wx
+    (OUT / 'lifelines').mkdir(exist_ok=True)
+    live = LIVE + '#lifelines'
+    html = []
+
+    b = [text(16, 24, 'REPOSITORIES, LIFELINES', 'h'),
+         text(W - 16, 24, f'{YEAR} · each tick is a commit · click a row to open it', 'm', 10, 'end'),
+         f'<rect class="win" x="{wx:.1f}" y="34" width="{ww:.1f}" height="23"/>']
+    for m in range(12):
+        b.append(text(xp(f'{YEAR}-{m + 1:02}-15'), 50, MON[m], 'm', 9.5, 'middle'))
+    b += [text(16, 50, 'repo', 'm', 9.5), text(LB, 50, 'languages', 'm', 9.5), text(NX, 50, 'n', 'm', 9.5, 'end')]
+    svg('lifelines/head', W, 58, f'Repositories in {YEAR}, lifelines: each tick is a commit; the shaded band is the rest of the year.', b)
+    html.append(f'<a href="{live}"><img src="assets/lifelines/head.svg" width="100%" alt="Repositories, lifelines. Each row below opens that repo in the live almanac."></a>')
+
+    for r in ACTIVE():
+        H, y = 30, 15
         lc = LANG.get(primary(r), 'other')
-        b += [f'<circle class="{lc}" cx="20" cy="{y - 3.5}" r="3.5"/>', text(30, y, fit(r['name'], 180, 11), size=11),
-              f'<line class="rule" x1="{xp(r["created"]):.1f}" x2="{xp(r["pushed"]):.1f}" y1="{y - 4}" y2="{y - 4}"/>',
-              f'<circle cx="{xp(r["created"]):.1f}" cy="{y - 4}" r="2.5" style="fill:var(--panel);stroke:var(--muted)"/>']
+        n = counts[r['name']]
+        b = [f'<rect class="win" x="{wx:.1f}" y="1" width="{ww:.1f}" height="{H - 2}"/>',
+             f'<circle class="{lc}" cx="20" cy="{y}" r="3.5"/>', text(30, y + 3.8, fit(r['name'], 180, 11), size=11),
+             f'<line class="rule" x1="{xp(r["created"]):.1f}" x2="{xp(r["pushed"]):.1f}" y1="{y}" y2="{y}"/>',
+             *([f'<circle cx="{xp(r["created"]):.1f}" cy="{y}" r="2.5" style="fill:var(--panel);stroke:var(--muted)"/>']
+               if r['created'][:4] == str(YEAR) else [])]
         for c in (c for c in COMMITS if c['repo'] == r['name']):
-            b.append(f'<rect class="{lc}" x="{xp(c["date"]) - 1:.1f}" y="{y - 10}" width="2" height="12" rx="1" opacity=".9"><title>{escape(c["t"][:10])}: {escape(c["msg"])}</title></rect>')
-        tot, x = sum(r['langs'].values()) or 1, 752
-        b.append(f'<rect class="l0" x="752" y="{y - 7}" width="68" height="6" rx="3"/>')
-        for l, n in sorted(r['langs'].items(), key=lambda kv: -kv[1]):
-            w = n / tot * 68
-            b.append(f'<rect class="{LANG.get(l, "other")}" x="{x:.1f}" y="{y - 7}" width="{w:.1f}" height="6"/>')
+            b.append(f'<rect class="{lc}" x="{xp(c["date"]) - 1:.1f}" y="{y - 6}" width="2" height="12" rx="1" opacity=".9"/>')
+        tot, x = sum(r['langs'].values()) or 1, LB
+        b.append(f'<rect class="l0" x="{LB}" y="{y - 3}" width="68" height="6" rx="3"/>')
+        for l, v in sorted(r['langs'].items(), key=lambda kv: -kv[1]):
+            w = v / tot * 68
+            b.append(f'<rect class="{LANG.get(l, "other")}" x="{x:.1f}" y="{y - 3}" width="{w:.1f}" height="6"/>')
             x += w
-        b.append(text(W - 16, y, counts[r['name']], 's', 11, 'end'))
+        b += [text(NX, y + 3.8, n, 's', 11, 'end'), text(W - 14, y + 4, '›', 'a', 13, 'end')]
+        slug = r['name'].lower()
+        svg(f'lifelines/{slug}', W, H, f'{r["name"]}: {n} commits in {YEAR}, created {short(r["created"])}, last push {short(r["pushed"])}.', b)
+        html.append(f'<a href="{LIVE}?repo={r["name"]}#lifelines"><img src="assets/lifelines/{slug}.svg" width="100%" '
+                    f'alt="{escape(r["name"])}: {n} commits in {YEAR}, created {short(r["created"])}, last push {short(r["pushed"])}. Opens it in the live almanac."></a>')
+
     totals = Counter()
-    for r in REPOS:
+    for r in ACTIVE():
         totals.update(r['langs'])
-    tot, x, y = sum(totals.values()), 16, 300
-    groups = Counter({LANG.get(l, 'other'): 0 for l in totals})
+    tot, groups = sum(totals.values()), Counter()
     names = {'py': 'Python', 'js': 'JavaScript', 'css': 'CSS', 'html': 'HTML', 'java': 'Java', 'other': 'Other'}
-    for l, n in totals.items():
-        groups[LANG.get(l, 'other')] += n
-    b.append(f'<line class="rule soft" x1="16" x2="{W - 16}" y1="{y - 14}" y2="{y - 14}"/>')
-    for g, n in groups.most_common():
-        w = n / tot * (W - 32)
-        b.append(f'<rect class="{g}" x="{x:.1f}" y="{y}" width="{w:.1f}" height="8"/>')
+    for l, v in totals.items():
+        groups[LANG.get(l, 'other')] += v
+    b, x = [], 16
+    for g, v in groups.most_common():
+        w = v / tot * (W - 32)
+        b.append(f'<rect class="{g}" x="{x:.1f}" y="14" width="{w:.1f}" height="8"/>')
         x += w
     kx = 16
-    for g, n in groups.most_common():
-        label = f'{names[g]} {100 * n / tot:.1f}%'
-        b += [f'<rect class="{g}" x="{kx}" y="{y + 20}" width="8" height="8" rx="2"/>', text(kx + 13, y + 28, label, 's', 10.5)]
+    for g, v in groups.most_common():
+        label = f'{names[g]} {100 * v / tot:.1f}%'
+        b += [f'<rect class="{g}" x="{kx}" y="34" width="8" height="8" rx="2"/>', text(kx + 13, 42, label, 's', 10.5)]
         kx += 13 + len(label) * 6.3 + 16
-    b.append(text(W - 16, y + 28, 'by bytes, all ten repos', 'm', 10.5, 'end'))
-    svg('lifelines', W, H, 'Timeline of all ten public repositories with one tick per commit, and each repo’s language split.', b)
+    b.append(text(W - 16, 42, f'by bytes, the {len(ACTIVE())} repos above', 'm', 10.5, 'end'))
+    split = ', '.join(f'{names[g]} {100 * v / tot:.1f}%' for g, v in groups.most_common())
+    svg('lifelines/languages', W, 56, f'Languages across the {len(ACTIVE())} repos active in {YEAR}, by bytes: {split}.', b)
+    html.append(f'<a href="{live}"><img src="assets/lifelines/languages.svg" width="100%" alt="Languages across the {len(ACTIVE())} repos active in {YEAR}, by bytes: {split}."></a>')
+    fill_readme('<!-- almanac:lifelines -->', '<!-- /almanac:lifelines -->', '\n'.join(html))
 
 
 # ---------------------------------------------------------------- stack
@@ -287,8 +337,7 @@ NORM = dict(updated='update', added='add', created='create', removed='remove', d
             fixed='fix', enhanced='enhance', refactored='refactor', implemented='implement', updates='update')
 
 
-def words(commits=COMMITS, name='words', label=''):
-    W, H = 436, 420
+def words_body(commits, label='', show_repo=True, latest=9, W=436):
     f = Counter()
     for c in commits:
         m = re.search(r'[A-Za-z]+', CONV.sub('', c['msg']))
@@ -317,11 +366,43 @@ def words(commits=COMMITS, name='words', label=''):
           text(W / 2, y + 30, f'{round(100 * len(conv) / len(commits))}% “feat:/fix:”{since}', 'hot', 10, 'middle')]
     y += 58
     b.append(text(16, y, 'LATEST', 'h'))
-    for c in reversed(commits[-9:]):
+    for c in reversed(commits[-latest:]):
         y += 19
         stamp = f'{short(c["date"])} {c["t"][11:]}'
-        b += [text(16, y, stamp, 'm', 10.5), text(142, y, fit(c['msg'] if label else f'{c["repo"]}  {c["msg"]}', W - 158, 10.5), 's', 10.5)]
-    svg(name, W, H, f'The most common first words of commit messages{" to " + label if label else ""}, and the latest commits.', b)
+        b += [text(16, y, stamp, 'm', 10.5), text(142, y, fit(f'{c["repo"]}  {c["msg"]}' if show_repo else c['msg'], W - 158, 10.5), 's', 10.5)]
+    return b
+
+
+def words(commits=COMMITS, name='words', label=''):
+    svg(name, 436, 420, f'The most common first words of commit messages{" to " + label if label else ""}, and the latest commits.',
+        words_body(commits, label, show_repo=not label))
+
+
+def words_cycle():
+    """The README's words panel: every repo in turn, then all of them again.
+
+    One frame per repo, all sharing a single @keyframes and staggered by a
+    negative animation-delay -- negative, so every frame is already mid-cycle
+    at load instead of sitting on its first (visible) keyframe until its turn. With reduced motion only the
+    first frame (all repos) shows."""
+    W, H, SLOT = 436, 436, 4
+    frames = [('all repos', COMMITS, True)] + [
+        (r['name'], [c for c in COMMITS if c['repo'] == r['name']], False)
+        for r in sorted(REPOS, key=lambda r: -counts[r['name']]) if counts[r['name']]]
+    n = len(frames)
+    on = 100 / n
+    x = 1.2  # % of the loop spent crossfading into the next frame
+    b = [f'<style>@keyframes frame{{0%{{opacity:0}}{x}%,{on:.2f}%{{opacity:1}}{on + x:.2f}%,100%{{opacity:0}}}}'
+         f'.fr{{animation:frame {n * SLOT}s linear infinite both}}</style>']
+    dw = (W - 32) / n
+    for k in range(n):  # the progress row: which frame is showing
+        b.append(f'<rect class="l0" x="{16 + k * dw:.1f}" y="{H - 16}" width="{dw - 3:.1f}" height="4" rx="2"/>')
+    for k, (label, cs, show) in enumerate(frames):
+        body = words_body(cs, label, show_repo=show, latest=8)
+        body.append(f'<rect class="a" x="{16 + k * dw:.1f}" y="{H - 16}" width="{dw - 3:.1f}" height="4" rx="2"/>')
+        b.append(f'<g class="fr fr{k}" style="animation-delay:{(k - n) * SLOT}s">{"".join(body)}</g>')
+    svg('words', W, H, 'How the commits are written, cycling through every repository: the most common first words, '
+        'the share written as conventional commits, and the latest commits.', b)
 
 
 # ---------------------------------------------------------------- per repo
@@ -330,6 +411,23 @@ def words(commits=COMMITS, name='words', label=''):
 # repo's own clock and words, drawn here ahead of time.
 LIVE = 'https://akshayaa-403.github.io/akshayaa-403/almanac/'
 START, END = '<!-- almanac:repos -->', '<!-- /almanac:repos -->'
+
+
+def fill_readme(start, end, body):
+    readme = HERE / 'README.md'
+    s = readme.read_text(encoding='utf8')
+    if start in s and end in s:
+        head, rest = s.split(start, 1)
+        readme.write_text(head + start + '\n' + body + '\n' + end + rest.split(end, 1)[1], encoding='utf8', newline='\n')
+
+
+def repo_stack(code):
+    rows = []
+    for fam, libs in D['stack']:
+        hits = [lib + (' (optional)' if f'{code}*' in where else '') for lib, where in libs if code in where or f'{code}*' in where]
+        if hits:
+            rows.append(f'<li><b>{escape(fam)}:</b> {escape(", ".join(hits))}</li>')
+    return rows
 
 
 def per_repo():
@@ -349,7 +447,7 @@ def per_repo():
         desc = r['desc'][0].upper() + r['desc'][1:]
         rows.append('\n'.join([
             '<details>',
-            f'<summary><b>{escape(name)}</b> · {len(cs)} commits · {late}% after 8 pm</summary>',
+            f'<summary><b>{escape(name)}</b> · {len(cs)} commits in {YEAR} · {late}% after 8 pm</summary>',
             '',
             f'{escape(desc)} Created {short(r["created"])}, last push {short(r["pushed"])}. {langs}.',
             '',
@@ -358,23 +456,35 @@ def per_repo():
             f'  <a href="{live}#words"><img src="assets/repo/{slug}-words.svg" width="49%" alt="How the commits to {escape(name)} are written, and the latest ones."></a>',
             '</p>',
             '',
+            *nested(r, cs),
             f'[Open {escape(name)} in the live almanac]({live}) · [Repository](https://github.com/akshayaa-403/{name})',
             '</details>',
         ]))
-    readme = HERE / 'README.md'
-    s = readme.read_text(encoding='utf8')
-    if START in s and END in s:
-        head, rest = s.split(START, 1)
-        s = head + START + '\n' + '\n'.join(rows) + '\n' + END + rest.split(END, 1)[1]
-        readme.write_text(s, encoding='utf8', newline='\n')
+    fill_readme(START, END, '\n'.join(rows))
 
 
-def data_js():  # the live almanac reads the same data.json
+def nested(r, cs):
+    """Two more <details> inside a repo's block: what it imports, and its
+    latest commits, each one a link to the commit itself."""
+    out = []
+    stack = repo_stack(r['code'])
+    if stack:
+        out += ['<details>', '<summary>Stack it imports</summary>', '', '<ul>', *stack, '</ul>', '</details>', '']
+    url = f'https://github.com/akshayaa-403/{r["name"]}/commit/'
+    last = [f'<li><a href="{url}{c["sha"]}"><code>{c["sha"]}</code></a> {short(c["date"])} {c["t"][11:]} · {escape(c["msg"])}</li>'
+            for c in reversed(cs[-8:])]
+    out += ['<details>', f'<summary>Last {len(last)} commits</summary>', '', '<ul>', *last, '</ul>', '</details>', '']
+    return out
+
+
+def data_js():  # the live almanac reads the same data, cut to the same year
+    cut = dict(D, year=YEAR, start=str(Y0), cal=[n for _, n in CAL],
+               commits=[c for c in D['commits'] if c[1][:4] == str(YEAR)])
     (HERE / 'almanac' / 'data.js').write_text(
-        '/* Generated by build.py from data.json. Do not edit. */\nwindow.ALMANAC_DATA = '
-        + json.dumps(D, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf8', newline='\n')
+        f'/* Generated by build.py from data.json: {YEAR} only. Do not edit. */\nwindow.ALMANAC_DATA = '
+        + json.dumps(cut, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf8', newline='\n')
 
 
-for draw in (header, ring, clock, lifelines, stack, words, per_repo, data_js):
+for draw in (header, ring, clock, lifelines, stack, words_cycle, per_repo, data_js):
     draw()
 print('wrote', ', '.join(sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob('*.svg'))))

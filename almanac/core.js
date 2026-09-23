@@ -33,7 +33,8 @@
   const langColor = l => `var(${LANG_VAR[l] || '--other'})`;
   const primary = r => Object.entries(r.langs).sort((a, b) => b[1] - a[1])[0]?.[0];
   const COMMITS = D.commits.map(([repo, t, msg, sha]) => ({ repo, t, date: t.slice(0,10), hour: +t.slice(11,13), msg, sha }));
-  const start = utc(D.start);
+  // data.js is already cut to one calendar year by build.py; D.start is 1 Jan
+  const YEAR = D.year, start = utc(D.start);
   const CAL = D.cal.map((n, i) => ({ date: iso(new Date(start.getTime() + i * 864e5)), n, i }));
   const total = CAL.reduce((s, d) => s + d.n, 0);
   const peak = CAL.reduce((a, b) => b.n > a.n ? b : a);
@@ -92,7 +93,7 @@
   }
 
   window.Almanac = {
-    D, MON, WD, esc, el, utc, fmtDay, fmtShort, polar, sector,
+    D, YEAR, MON, WD, esc, el, utc, fmtDay, fmtShort, polar, sector,
     REPOS, byName, langColor, primary, COMMITS, CAL, total, peak, longest, activeDays,
     counts, commitsByDay, lateShare, langBar, showTip, hideTip,
     state, select, component, mount,

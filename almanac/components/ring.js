@@ -1,21 +1,24 @@
-/* data-component="ring": the contribution calendar bent into a ring, 53 weeks
-   clockwise from the top, Sunday innermost. Hover a day to read it in the
+/* data-component="ring": the year's contribution calendar bent into a ring,
+   1 Jan at the top, weeks clockwise, Sunday innermost; the days still to come
+   are drawn faint. Hover a day to read it in the
    centre; a selected repo marks its commit days in red. */
 Almanac.component('ring', root => {
-  const { CAL, MON, esc, el, utc, fmtDay, polar, sector, peak, total, COMMITS, commitsByDay } = Almanac;
+  const { CAL, YEAR, MON, esc, el, utc, fmtDay, polar, sector, peak, total, COMMITS, commitsByDay } = Almanac;
   root.innerHTML = `
-    <div class="hd"><h2 id="h-ring">The year, as a ring</h2><span class="legend" aria-hidden="true">less <i style="background:var(--l0)"></i><i style="background:var(--l1)"></i><i style="background:var(--l2)"></i><i style="background:var(--l3)"></i><i style="background:var(--l4)"></i><i style="background:var(--l5)"></i> more</span></div>
+    <div class="hd"><h2 id="h-ring">${YEAR}, as a ring</h2><span class="legend" aria-hidden="true">less <i style="background:var(--l0)"></i><i style="background:var(--l1)"></i><i style="background:var(--l2)"></i><i style="background:var(--l3)"></i><i style="background:var(--l4)"></i><i style="background:var(--l5)"></i> more</span></div>
     <div class="draw">
-      <svg viewBox="0 0 400 400" role="img" aria-label="Contribution calendar drawn as a ring: 53 weeks clockwise from the top, Sunday innermost."></svg>
+      <svg viewBox="0 0 400 400" role="img" aria-label="The ${YEAR} contribution calendar drawn as a ring: weeks clockwise from 1 January at the top, Sunday innermost."></svg>
       <div class="centre" aria-live="polite"></div>
     </div>`;
   root.setAttribute('aria-labelledby', 'h-ring');
   const ring = root.querySelector('svg'), centre = root.querySelector('.centre');
 
-  const RC = 200, R0 = 86, RW = 13.4, GAP = 12, WEEKS = Math.ceil(CAL.length / 7);
+  const Y0 = utc(`${YEAR}-01-01`), DAYS = Math.round((utc(`${YEAR + 1}-01-01`) - Y0) / 864e5);
+  const OFF = Y0.getUTCDay();  // weeks start on Sunday; the year need not
+  const RC = 200, R0 = 86, RW = 13.4, GAP = 12, WEEKS = Math.ceil((OFF + DAYS) / 7);
   const STEP = (360 - GAP) / WEEKS, A0 = GAP / 2;
   const level = n => n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 10 ? 3 : n <= 20 ? 4 : 5;
-  const geom = i => { const w = Math.floor(i / 7), dow = i % 7; return { a0: A0 + w * STEP + .35, a1: A0 + (w + 1) * STEP - .35, r1: R0 + dow * RW + .6, r2: R0 + (dow + 1) * RW - .6 }; };
+  const geom = i => { const w = Math.floor((i + OFF) / 7), dow = (i + OFF) % 7; return { a0: A0 + w * STEP + .35, a1: A0 + (w + 1) * STEP - .35, r1: R0 + dow * RW + .6, r2: R0 + (dow + 1) * RW - .6 }; };
 
   const cells = el('g');
   for (const d of CAL) {
@@ -24,13 +27,18 @@ Almanac.component('ring', root => {
     p.dataset.i = d.i;
     cells.append(p);
   }
+  for (let i = CAL.length; i < DAYS; i++) {  // the days still to come
+    const g = geom(i);
+    cells.append(el('path', { d: sector(RC, RC, g.r1, g.r2, g.a0, g.a1), fill: 'var(--l0)', opacity: .35, 'pointer-events': 'none' }));
+  }
   ring.append(cells);
   const g = geom(peak.i);
   ring.append(el('path', { d: sector(RC, RC, g.r1 - .6, g.r2 + .6, g.a0 - .35, g.a1 + .35), fill: 'none', stroke: 'var(--hot)', 'stroke-width': 1.6, 'pointer-events': 'none' }));
   const outer = R0 + 7 * RW;
   let lastM = -1;
   for (let w = 0; w < WEEKS; w++) {
-    const d = utc(CAL[Math.min(w * 7, CAL.length - 1)].date), m = d.getUTCMonth();
+    const d = new Date(Math.max(Y0.getTime(), Y0.getTime() + (w * 7 - OFF) * 864e5)), m = d.getUTCMonth();
+    if (d.getUTCFullYear() !== YEAR) break;
     if (m === lastM) continue;
     if (lastM !== -1 || d.getUTCDate() <= 7) {
       const [x, y] = polar(RC, RC, outer + 11, A0 + (w + .5) * STEP);
@@ -52,8 +60,8 @@ Almanac.component('ring', root => {
       const days = new Set(COMMITS.filter(c => c.repo === repo && c.date >= CAL[0].date).map(c => c.date)).size;
       centre.innerHTML = `<span class="big">${days}</span><span class="lbl">days with commits to<br>${esc(repo)}</span><span class="note">marked in red</span>`;
     } else {
-      const m = s => `${MON[utc(s).getUTCMonth()]} ’${s.slice(2,4)}`;
-      centre.innerHTML = `<span class="big">${total}</span><span class="lbl">contributions<br>${m(CAL[0].date)} – ${m(CAL.at(-1).date)}</span><span class="note">loudest: ${peak.n} on ${utc(peak.date).getUTCDate()} ${MON[utc(peak.date).getUTCMonth()]}</span>`;
+      const last = utc(CAL.at(-1).date);
+      centre.innerHTML = `<span class="big">${total}</span><span class="lbl">contributions<br>1 Jan – ${last.getUTCDate()} ${MON[last.getUTCMonth()]} ${YEAR}</span><span class="note">loudest: ${peak.n} on ${utc(peak.date).getUTCDate()} ${MON[utc(peak.date).getUTCMonth()]}</span>`;
     }
   }
   ring.addEventListener('pointerover', e => {
