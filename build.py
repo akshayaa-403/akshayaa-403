@@ -5,7 +5,7 @@ and an SVG may carry its own <style> -- so each panel themes itself with
 prefers-color-scheme and animates with CSS, with no JavaScript anywhere.
 
     python build.py        # writes assets/**/*.svg and almanac/data.js, and the
-                           # generated blocks in README.md (lifelines, per-repo <details>)
+                           # the per-repo <details> block in README.md
 """
 import json, math, re, datetime as dt
 from collections import Counter
@@ -115,21 +115,26 @@ def fit(s, width, size):  # monospace: a glyph is ~0.6em wide
 
 # ---------------------------------------------------------------- header
 def header():
-    W, H = 880, 158
+    W, H = 880, 198
+    socials = [('GitHub', 'github.com/akshayaa-403'), ('LinkedIn', 'linkedin.com/in/akshayaa-kashyap'),
+               ('Portfolio', 'akshayaa-403.github.io/portfolio'), ('Email', 'akshayaakashyap5@gmail.com')]
     b = [text(20, 38, 'Akshayaa Kashyap', size=24, extra=' font-weight="600"'),
          text(20 + 17 * 14.4, 38, '@akshayaa-403', 'a', 24),
          text(20, 60, 'AI Engineer · AI & data · India · on GitHub since 13 Jun 2023', 'm', 12),
          text(20, 82, 'I build data pipelines, LLM workflows and dashboards that turn messy data into clear decisions.', 's', 12),
-         f'<line class="rule" x1="20" x2="{W - 20}" y1="100" y2="100"/>']
+         f'<line class="rule" x1="20" x2="{W - 20}" y1="140" y2="140"/>']
+    for k, (label, handle) in enumerate(socials):  # two by two: one line of four does not fit
+        x, y = 20 + (k % 2) * 420, 106 + (k // 2) * 18
+        b += [text(x, y, label.upper(), 'h'), text(x + 84, y, handle, 'a', 11)]
     figs = [('CONTRIBUTIONS', total, f'in {YEAR}'), ('ACTIVE DAYS', sum(1 for _, n in CAL if n), f'of {len(CAL)}'),
             ('LONGEST STREAK', longest, 'days'), ('COMMITS', len(COMMITS), f'in {YEAR}'), ('AFTER 8 PM', f'{late}%', 'of commits')]
     cw = (W - 40) / len(figs)
     for k, (lbl, v, sub) in enumerate(figs):
         x = 20 + k * cw
         if k:
-            b.append(f'<line class="rule" x1="{x - 14:.1f}" x2="{x - 14:.1f}" y1="114" y2="146"/>')
-        b += [text(x, 122, lbl, 'h'), text(x, 144, v, size=22, extra=' font-weight="500"'),
-              text(x + len(str(v)) * 13.2 + 6, 144, sub, 'm', 11)]
+            b.append(f'<line class="rule" x1="{x - 14:.1f}" x2="{x - 14:.1f}" y1="154" y2="186"/>')
+        b += [text(x, 162, lbl, 'h'), text(x, 184, v, size=22, extra=' font-weight="500"'),
+              text(x + len(str(v)) * 13.2 + 6, 184, sub, 'm', 11)]
     svg('header', W, H, f'Akshayaa Kashyap (@akshayaa-403): {total} contributions in {YEAR} so far, '
         f'{len(COMMITS)} public commits, {late}% of them after 8 pm IST.', b)
 
@@ -231,81 +236,9 @@ def clock(commits=COMMITS, name='clock', label=''):
     svg(name, W, H, f'Commits{" to " + label if label else ""} by hour of day in IST: {late}% land after 8 pm, the busiest hour is {top:02}:00.', b)
 
 
-# ---------------------------------------------------------------- lifelines
-def lifelines():
-    """Drawn as strips, one image per repo, so each row in the README can be its
-    own link into the live almanac, filtered to that repo -- the nearest a README
-    gets to clicking a row in the dashboard. Each strip is its own small panel,
-    so the gap GitHub leaves between stacked images reads as a row separator."""
-    W, X0, X1, LB, NX = 880, 216, 716, 736, 840
-    T0, T1 = Y0, Y1 + dt.timedelta(1)
-    xp = lambda s: X0 + (min(max(date(s), T0), T1) - T0).days / (T1 - T0).days * (X1 - X0)
-    # shaded: the part of the year still to come
-    wx = xp(str(CAL[-1][0] + dt.timedelta(1)))
-    ww = X1 - wx
-    (OUT / 'lifelines').mkdir(exist_ok=True)
-    live = LIVE + '#lifelines'
-    html = []
-
-    b = [text(16, 24, 'REPOSITORIES, LIFELINES', 'h'),
-         text(W - 16, 24, f'{YEAR} · each tick is a commit · click a row to open it', 'm', 10, 'end'),
-         f'<rect class="win" x="{wx:.1f}" y="34" width="{ww:.1f}" height="23"/>']
-    for m in range(12):
-        b.append(text(xp(f'{YEAR}-{m + 1:02}-15'), 50, MON[m], 'm', 9.5, 'middle'))
-    b += [text(16, 50, 'repo', 'm', 9.5), text(LB, 50, 'languages', 'm', 9.5), text(NX, 50, 'n', 'm', 9.5, 'end')]
-    svg('lifelines/head', W, 58, f'Repositories in {YEAR}, lifelines: each tick is a commit; the shaded band is the rest of the year.', b)
-    html.append(f'<a href="{live}"><img src="assets/lifelines/head.svg" width="100%" alt="Repositories, lifelines. Each row below opens that repo in the live almanac."></a>')
-
-    for r in ACTIVE():
-        H, y = 30, 15
-        lc = LANG.get(primary(r), 'other')
-        n = counts[r['name']]
-        b = [f'<rect class="win" x="{wx:.1f}" y="1" width="{ww:.1f}" height="{H - 2}"/>',
-             f'<circle class="{lc}" cx="20" cy="{y}" r="3.5"/>', text(30, y + 3.8, fit(r['name'], 180, 11), size=11),
-             f'<line class="rule" x1="{xp(r["created"]):.1f}" x2="{xp(r["pushed"]):.1f}" y1="{y}" y2="{y}"/>',
-             *([f'<circle cx="{xp(r["created"]):.1f}" cy="{y}" r="2.5" style="fill:var(--panel);stroke:var(--muted)"/>']
-               if r['created'][:4] == str(YEAR) else [])]
-        for c in (c for c in COMMITS if c['repo'] == r['name']):
-            b.append(f'<rect class="{lc}" x="{xp(c["date"]) - 1:.1f}" y="{y - 6}" width="2" height="12" rx="1" opacity=".9"/>')
-        tot, x = sum(r['langs'].values()) or 1, LB
-        b.append(f'<rect class="l0" x="{LB}" y="{y - 3}" width="68" height="6" rx="3"/>')
-        for l, v in sorted(r['langs'].items(), key=lambda kv: -kv[1]):
-            w = v / tot * 68
-            b.append(f'<rect class="{LANG.get(l, "other")}" x="{x:.1f}" y="{y - 3}" width="{w:.1f}" height="6"/>')
-            x += w
-        b += [text(NX, y + 3.8, n, 's', 11, 'end'), text(W - 14, y + 4, '›', 'a', 13, 'end')]
-        slug = r['name'].lower()
-        svg(f'lifelines/{slug}', W, H, f'{r["name"]}: {n} commits in {YEAR}, created {short(r["created"])}, last push {short(r["pushed"])}.', b)
-        html.append(f'<a href="{LIVE}?repo={r["name"]}#lifelines"><img src="assets/lifelines/{slug}.svg" width="100%" '
-                    f'alt="{escape(r["name"])}: {n} commits in {YEAR}, created {short(r["created"])}, last push {short(r["pushed"])}. Opens it in the live almanac."></a>')
-
-    totals = Counter()
-    for r in ACTIVE():
-        totals.update(r['langs'])
-    tot, groups = sum(totals.values()), Counter()
-    names = {'py': 'Python', 'js': 'JavaScript', 'css': 'CSS', 'html': 'HTML', 'java': 'Java', 'other': 'Other'}
-    for l, v in totals.items():
-        groups[LANG.get(l, 'other')] += v
-    b, x = [], 16
-    for g, v in groups.most_common():
-        w = v / tot * (W - 32)
-        b.append(f'<rect class="{g}" x="{x:.1f}" y="14" width="{w:.1f}" height="8"/>')
-        x += w
-    kx = 16
-    for g, v in groups.most_common():
-        label = f'{names[g]} {100 * v / tot:.1f}%'
-        b += [f'<rect class="{g}" x="{kx}" y="34" width="8" height="8" rx="2"/>', text(kx + 13, 42, label, 's', 10.5)]
-        kx += 13 + len(label) * 6.3 + 16
-    b.append(text(W - 16, 42, f'by bytes, the {len(ACTIVE())} repos above', 'm', 10.5, 'end'))
-    split = ', '.join(f'{names[g]} {100 * v / tot:.1f}%' for g, v in groups.most_common())
-    svg('lifelines/languages', W, 56, f'Languages across the {len(ACTIVE())} repos active in {YEAR}, by bytes: {split}.', b)
-    html.append(f'<a href="{live}"><img src="assets/lifelines/languages.svg" width="100%" alt="Languages across the {len(ACTIVE())} repos active in {YEAR}, by bytes: {split}."></a>')
-    fill_readme('<!-- almanac:lifelines -->', '<!-- /almanac:lifelines -->', '\n'.join(html))
-
-
 # ---------------------------------------------------------------- stack
 def stack():
-    W, H = 436, 420
+    W, H = 436, 436  # the same tile as words_cycle(), which sits beside it
     cols = [r for r in REPOS if r['code'] != 'RM']
     cx0, cw, rh = 180, 27, 15
     b = [text(16, 24, 'STACK, BY EVIDENCE', 'h'), text(W - 16, 24, '● imported · ○ optional', 'm', 10, 'end')]
@@ -409,7 +342,6 @@ def words_cycle():
 # A README can't run a script, but it can open a <details>. So the live page's
 # "click a repo to filter" becomes one <details> per repo, each holding that
 # repo's own clock and words, drawn here ahead of time.
-LIVE = 'https://akshayaa-403.github.io/akshayaa-403/almanac/'
 START, END = '<!-- almanac:repos -->', '<!-- /almanac:repos -->'
 
 
@@ -443,7 +375,6 @@ def per_repo():
         tot = sum(r['langs'].values())
         langs = ' · '.join(f'{l} {100 * n / tot:.0f}%' for l, n in sorted(r['langs'].items(), key=lambda kv: -kv[1])) or 'Markdown only'
         late = round(100 * sum(c['hour'] >= 20 or c['hour'] < 4 for c in cs) / len(cs))
-        live = f'{LIVE}?repo={name}'
         desc = r['desc'][0].upper() + r['desc'][1:]
         rows.append('\n'.join([
             '<details>',
@@ -452,12 +383,12 @@ def per_repo():
             f'{escape(desc)} Created {short(r["created"])}, last push {short(r["pushed"])}. {langs}.',
             '',
             '<p align="center">',
-            f'  <a href="{live}#clock"><img src="assets/repo/{slug}-clock.svg" width="49%" alt="Commits to {escape(name)} by hour of day, IST: {late}% after 8 pm."></a>',
-            f'  <a href="{live}#words"><img src="assets/repo/{slug}-words.svg" width="49%" alt="How the commits to {escape(name)} are written, and the latest ones."></a>',
+            f'  <img src="assets/repo/{slug}-clock.svg" width="49%" alt="Commits to {escape(name)} in {YEAR} by hour of day, IST: {late}% after 8 pm.">',
+            f'  <img src="assets/repo/{slug}-words.svg" width="49%" alt="How the commits to {escape(name)} in {YEAR} are written, and the latest ones.">',
             '</p>',
             '',
             *nested(r, cs),
-            f'[Open {escape(name)} in the live almanac]({live}) · [Repository](https://github.com/akshayaa-403/{name})',
+            f'[Repository](https://github.com/akshayaa-403/{name})',
             '</details>',
         ]))
     fill_readme(START, END, '\n'.join(rows))
@@ -485,6 +416,6 @@ def data_js():  # the live almanac reads the same data, cut to the same year
         + json.dumps(cut, ensure_ascii=False, separators=(',', ':')) + ';\n', encoding='utf8', newline='\n')
 
 
-for draw in (header, ring, clock, lifelines, stack, words_cycle, per_repo, data_js):
+for draw in (header, ring, clock, stack, words_cycle, per_repo, data_js):
     draw()
 print('wrote', ', '.join(sorted(p.relative_to(OUT).as_posix() for p in OUT.rglob('*.svg'))))
