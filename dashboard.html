@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="GitHub dashboard for akshayaa-403: contributions as a ring, a commit clock, repo lifelines and a stack grid built from real imports.">
+<title>akshayaa-403 Almanac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;600&display=swap">
+<style>
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+:root{
+  --bg:#e9eff6; --panel:#f8fafc; --line:#d3dee9; --line-soft:#e3eaf2;
+  --ink:#16283d; --ink-soft:#3c5a7a; --muted:#4e6880;
+  --accent:#094e94; --accent-deep:#00317a; --tint:rgba(9,78,148,.07); --tint-strong:rgba(9,78,148,.15);
+  --l0:#dde6f0; --l1:#b2d5e7; --l2:#80b1d7; --l3:#3d7fbe; --l4:#094e94; --l5:#00245c;
+  --hot:#c2412d; --night:rgba(9,78,148,.09);
+  --py:#094e94; --js:#946b00; --css:#9a4a86; --html:#2e7254; --java:#5d4fa0; --other:#7a8896;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --script:'Caveat','Segoe Script','Bradley Hand',cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#091220; --panel:#0f1b27; --line:#22364a; --line-soft:#182a3b;
+  --ink:#eaf1f8; --ink-soft:#b3c6d8; --muted:#93a9bd;
+  --accent:#9ccbf2; --accent-deep:#cfe6f5; --tint:rgba(125,184,232,.08); --tint-strong:rgba(125,184,232,.18);
+  --l0:#172a3c; --l1:#1d4466; --l2:#2d6a9c; --l3:#4f95d0; --l4:#86c0ee; --l5:#d4ebfb;
+  --hot:#ff8a70; --night:rgba(125,184,232,.08);
+  --py:#7db8e8; --js:#e0b54a; --css:#e08cc8; --html:#6fc39c; --java:#ab9cf0; --other:#8fa0b0;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#091220; --panel:#0f1b27; --line:#22364a; --line-soft:#182a3b;
+  --ink:#eaf1f8; --ink-soft:#b3c6d8; --muted:#93a9bd;
+  --accent:#9ccbf2; --accent-deep:#cfe6f5; --tint:rgba(125,184,232,.08); --tint-strong:rgba(125,184,232,.18);
+  --l0:#172a3c; --l1:#1d4466; --l2:#2d6a9c; --l3:#4f95d0; --l4:#86c0ee; --l5:#d4ebfb;
+  --hot:#ff8a70; --night:rgba(125,184,232,.08);
+  --py:#7db8e8; --js:#e0b54a; --css:#e08cc8; --html:#6fc39c; --java:#ab9cf0; --other:#8fa0b0;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:12px/1.45 var(--mono);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+a{color:var(--accent);text-underline-offset:3px}
+
+.app{height:100%;max-width:1720px;margin:0 auto;padding-block:14px;padding-inline:18px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px}
+
+/* header */
+.top{display:flex;align-items:flex-end;gap:28px;flex-wrap:wrap}
+.id h1{margin:0;font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+.id h1 span{color:var(--accent)}
+.id p{margin:4px 0 0;color:var(--muted);font-size:11.5px}
+.figs{display:flex;gap:0;margin:0 0 0 auto;flex-wrap:wrap}
+.figs div{padding:0 18px;border-left:1px solid var(--line)}
+.figs div:first-child{border-left:0}
+.figs dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.figs dd{margin:1px 0 0;font-size:20px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.15}
+.figs dd small{font-size:11px;color:var(--muted);font-weight:400;margin-left:3px}
+.links{display:flex;gap:14px;font-size:11.5px}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:minmax(0,1.1fr) minmax(0,1fr);gap:12px;min-height:0}
+.p{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0;position:relative}
+.p-ring{grid-column:1/5}.p-clock{grid-column:5/8}.p-life{grid-column:8/13}
+.p-stack{grid-column:1/6}.p-readme{grid-column:6/9}.p-words{grid-column:9/13}
+.hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h2{margin:0;font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hd .meta{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.note{font-family:var(--script);font-weight:500;font-size:17px;line-height:1;color:var(--accent)}
+.filter{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:var(--hot);text-transform:none;letter-spacing:0}
+.filter[hidden]{display:none!important}
+.filter button{border:1px solid currentColor;border-radius:9px;padding:0 6px;line-height:15px}
+
+/* ring + clock: square drawings that scale inside their panel */
+.draw{flex:1;min-height:0;position:relative;container-type:size}
+.draw svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.centre{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(38cqw,38cqh);text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+.centre .big{font-size:clamp(18px,min(9cqw,9cqh),34px);font-weight:500;line-height:1;font-variant-numeric:tabular-nums}
+.centre .lbl{font-size:10.5px;color:var(--muted)}
+.centre .msg{font-size:10px;color:var(--ink-soft);line-height:1.3;width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.centre .note{font-size:clamp(14px,min(4.4cqw,4.4cqh),18px);margin-top:3px}
+.cell{stroke:var(--panel);stroke-width:.8;transition:opacity .15s}
+.cell:hover{stroke:var(--ink);stroke-width:1.2}
+.ring-muted .cell{opacity:.45}
+.axis-t{fill:var(--muted);font:9px var(--mono)}
+.axis-y{fill:var(--ink);font:600 9.5px var(--mono)}
+.dow-t{fill:var(--muted);font:7.5px var(--mono);text-anchor:middle;dominant-baseline:central}
+.legend{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+.clock-bar{fill:var(--accent);transition:d .3s}
+.clock-bar.night{fill:var(--accent-deep)}
+.clock-bar:hover{fill:var(--hot)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;height:46px;align-items:end}
+.week div{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;height:100%;gap:3px}
+.week b{display:block;background:var(--l3);border-radius:2px 2px 0 0;min-height:1px;transition:height .3s}
+.week div.wk b{background:var(--l2)}
+.week span{font-size:9.5px;color:var(--muted);text-align:center;line-height:1}
+
+/* lifelines */
+.life{flex:1;min-height:0;display:grid;grid-template-rows:auto repeat(10,minmax(0,1fr));}
+.axis{display:grid;grid-template-columns:196px 1fr 48px 24px;gap:0 10px;font-size:9.5px;color:var(--muted)}
+.axis .ticks{position:relative;height:14px}
+.axis .ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.row{display:grid;grid-template-columns:196px 1fr 48px 24px;gap:0 10px;align-items:center;text-align:left;border-radius:3px;padding-inline:2px;margin-inline:-2px;min-height:0}
+.row:hover{background:var(--tint)}
+.row[aria-pressed="true"]{background:var(--tint-strong)}
+.row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.row .nm i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.track{position:relative;height:100%;min-height:14px}
+.track .win{position:absolute;top:0;bottom:0;background:var(--tint)}
+.track .span{position:absolute;top:50%;height:1px;background:var(--line);transform:translateY(-.5px)}
+.track .tick{position:absolute;top:50%;width:2px;height:12px;margin-left:-1px;transform:translateY(-50%);border-radius:1px;opacity:.9}
+.track .tick:hover{height:18px;opacity:1}
+.track .born{position:absolute;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border:1px solid var(--muted);border-radius:50%;background:var(--panel)}
+.langbar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--line-soft)}
+.langbar i{display:block;height:100%}
+.row .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.foot{border-top:1px solid var(--line-soft);padding-top:8px;display:flex;flex-direction:column;gap:6px;min-height:52px}
+.foot .langbar{height:8px}
+.foot .keys{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;color:var(--ink-soft)}
+.foot .keys i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.foot p{margin:0;font-size:11px;color:var(--ink-soft);line-height:1.4}
+.foot p b{color:var(--ink);font-weight:500}
+
+/* evidence matrix */
+.mx{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:62px 104px repeat(9,minmax(22px,1fr));grid-auto-rows:minmax(12px,1fr);align-items:center;font-size:11px}
+.mx .ch{font-size:10px;color:var(--muted);text-align:center;align-self:end;padding-bottom:3px;border-radius:3px}
+.mx .ch:hover{color:var(--ink)}
+.mx .fam{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:start;padding-top:2px;border-top:1px solid var(--line-soft);height:100%}
+.mx .lib{white-space:nowrap;color:var(--ink-soft);border-top:1px solid transparent;height:100%;display:flex;align-items:center}
+.mx .c{height:100%;display:grid;place-items:center}
+.mx .c.sel,.mx .ch.sel{background:var(--tint-strong)}
+.mx .c.sel:first-of-type{border-radius:3px 3px 0 0}
+.mx .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.mx .dot.opt{background:none;border:1.5px solid var(--accent)}
+.mx .ghost{width:3px;height:3px;border-radius:50%;background:var(--line)}
+.mx .rowhover .lib{color:var(--ink)}
+
+/* readme vs code */
+.venn{flex:1;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:8px}
+.split{display:flex;height:10px;border-radius:3px;overflow:hidden;gap:2px}
+.split i{display:block}
+.cols{display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}
+.cols h3{margin:0 0 4px;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{font-size:10.5px;padding:0 5px;border-radius:3px;line-height:16px;white-space:nowrap}
+.chip.both{background:var(--accent);color:var(--panel)}
+.chip.readme{border:1px dashed var(--muted);color:var(--muted)}
+.chip.code{border:1px solid var(--accent);color:var(--accent)}
+.sw-both{background:var(--accent)}.sw-readme{background:repeating-linear-gradient(135deg,var(--muted) 0 2px,transparent 2px 5px)}.sw-code{background:var(--l2)}
+
+/* words */
+.words{display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:10px;flex:1;min-height:0}
+.spec{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;line-height:1}
+.spec span{color:var(--ink);font-weight:500;white-space:nowrap}
+.spec span sup{font-size:9.5px;color:var(--muted);font-weight:400;margin-left:2px;vertical-align:top}
+.style-strip{display:flex;height:16px;gap:1px;align-items:stretch}
+.style-strip i{flex:1;background:var(--l1);border-radius:1px}
+.style-strip i.cv{background:var(--hot)}
+.strip-cap{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px}
+.log{margin:0;padding:0;list-style:none;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:5px}
+.log li{display:grid;grid-template-columns:124px minmax(0,1fr);gap:8px;font-size:11px;align-items:baseline}
+.log time{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.log span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-soft)}
+.log span b{font-weight:500;color:var(--ink)}
+
+.colophon{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--muted)}
+
+#tip{position:fixed;z-index:9;pointer-events:none;max-width:280px;background:var(--ink);color:var(--panel);font-size:11px;line-height:1.35;padding:6px 8px;border-radius:4px;opacity:0;transition:opacity .1s}
+#tip.on{opacity:1}
+#tip b{font-weight:600}
+
+/* narrower or shorter screens: stop fitting to one screen, let it scroll */
+@media (max-width:1180px),(max-height:680px){
+  .app{height:auto}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none}
+  .p{grid-column:auto!important}
+  .p-life,.p-words{grid-column:1/-1!important}
+  .draw{flex:none;aspect-ratio:1;width:100%;max-height:440px}
+  .life{grid-template-rows:auto;grid-auto-rows:26px}
+  .mx{grid-auto-rows:20px}
+  .figs{margin-left:0}
+}
+@media (max-width:720px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .figs div{padding:4px 12px 4px 0;border:0}
+  .axis,.row{grid-template-columns:104px 1fr 40px 24px;gap:0 6px}
+  .row .nm{font-size:10.5px}
+  .row .nm i{margin-right:4px}
+  .cols{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="id">
+      <h1>Akshayaa Kashyap <span>@akshayaa-403</span></h1>
+      <p>India · on GitHub since 13 Jun 2023 · open to hire</p>
+    </div>
+    <dl class="figs" id="figs"></dl>
+    <nav class="links" aria-label="Profiles">
+      <a href="https://github.com/akshayaa-403" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://akshayaa-403.github.io/portfolio/" target="_blank" rel="noreferrer">Portfolio</a>
+      <a href="https://linkedin.com/in/akshayaa-kashyap" target="_blank" rel="noreferrer">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main class="grid">
+    <section class="p p-ring" aria-labelledby="h-ring">
+      <div class="hd"><h2 id="h-ring">The year, as a ring</h2><span class="legend" aria-hidden="true">less <i style="background:var(--l0)"></i><i style="background:var(--l1)"></i><i style="background:var(--l2)"></i><i style="background:var(--l3)"></i><i style="background:var(--l4)"></i><i style="background:var(--l5)"></i> more</span></div>
+      <div class="draw" id="ring-draw">
+        <svg id="ring" viewBox="0 0 400 400" role="img" aria-label="Contribution calendar drawn as a ring: 53 weeks clockwise from the top, Sunday innermost."></svg>
+        <div class="centre" id="ring-centre" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="p p-clock" aria-labelledby="h-clock">
+      <div class="hd"><h2 id="h-clock">Commit clock</h2><span class="filter" data-filter hidden></span><span class="meta">IST · shaded 20:00–04:00</span></div>
+      <div class="draw">
+        <svg id="clock" viewBox="0 0 300 300" role="img" aria-label="Commits by hour of day, India Standard Time."></svg>
+        <div class="centre" id="clock-centre" style="width:min(30cqw,30cqh)"></div>
+        <span class="note" id="clock-note" style="position:absolute;left:0;bottom:0"></span>
+      </div>
+      <div class="week" id="week" aria-label="Commits by weekday"></div>
+    </section>
+
+    <section class="p p-life" aria-labelledby="h-life">
+      <div class="hd"><h2 id="h-life">Repositories, lifelines</h2><span class="meta">each tick is a commit · click a repo to filter</span></div>
+      <div class="life" id="life"></div>
+      <div class="foot" id="life-foot"></div>
+    </section>
+
+    <section class="p p-stack" aria-labelledby="h-stack">
+      <div class="hd"><h2 id="h-stack">Stack, by evidence</h2><span class="meta"><span class="dot-k">●</span> imported · ○ optional extra</span></div>
+      <div class="mx" id="mx" role="table" aria-label="Libraries found in each repository's imports and manifests"></div>
+    </section>
+
+    <section class="p p-readme" aria-labelledby="h-readme">
+      <div class="hd"><h2 id="h-readme">README vs. code</h2><span class="meta" id="venn-meta"></span></div>
+      <div class="venn" id="venn"></div>
+    </section>
+
+    <section class="p p-words" aria-labelledby="h-words">
+      <div class="hd"><h2 id="h-words">How the commits are written</h2><span class="filter" data-filter hidden></span></div>
+      <div class="words">
+        <div class="spec" id="spec" aria-label="Most common first verbs in commit messages"></div>
+        <div><div class="style-strip" id="strip" aria-hidden="true"></div><div class="strip-cap" id="strip-cap"></div></div>
+        <ol class="log" id="log" aria-label="Latest commits"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <span>Snapshot 23 Sep 2026 · GitHub REST API, the public contribution calendar, and each repo's imports and requirements files.</span>
+    <span>Commit times are author timestamps, shown in IST (UTC+5:30). Press Esc to clear a filter.</span>
+  </footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = {"cal":[0,4,2,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,41,0,7,3,0,0,4,0,0,0,5,6,0,0,0,10,0,0,3,0,0,4,3,0,0,0,0,5,10,9,2,8,10,0,0,11,1,7,0,0,0,0,4,3,7,3,0,0,1,1,2,2,0,0,0,0,4,2,2,13,3,0,0,4,0,0,0,0,0,0,0,2,0,0,0,0,0,1,2,4,2,3,2,3,1,1,4,1,4,8,5,0,4,1,2,1,2,1,1,1,1,2,1,6,3,0,0,0,7,1,1,1,2,1,1,1,1,4,2,4,3,3,0,1,1,1,1,3,3,5,3,2,1,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,2,1,2,4,0,1,0,3,4,9,1,2,2,4,0,1,0,0,5,2,0,1,1,0,0,1,0,0,0,3,0,0,0,0,0,1,1,1,2,2,1,2,1,3,1,1,1,2,3,1,1,2],"start":"2025-09-21","commits":[["Wikipedia-Summarizer","2025-01-30T16:06","Initial commit","b031c31"],["Wikipedia-Summarizer","2025-01-30T16:08","Create main.py","b627682"],["Wikipedia-Summarizer","2025-01-30T16:17","Update README.md","0d4521b"],["Wikipedia-Summarizer","2025-02-04T17:52","Update main.py","fd7c0bc"],["yosemite-image-translation-gan","2025-04-04T16:51","Initial commit","73b3085"],["yosemite-image-translation-gan","2025-04-04T16:56","Created using Colab","a0cdb8e"],["yosemite-image-translation-gan","2025-04-04T17:46","Created using Colab","1f633ab"],["quantamental-screener","2025-09-22T20:25","Initial commit","a519961"],["quantamental-screener","2025-09-22T20:26","Created using Colab","152acbc"],["quantamental-screener","2025-09-22T21:01","Update README.md","2115725"],["quantamental-screener","2025-09-23T00:17","Update README.md","1d114ea"],["quantamental-screener","2025-09-23T22:10","Update README.md","b6e2f3b"],["portfolio","2026-04-06T19:52","Initial commit","c9d2394"],["akshayaa-403","2026-04-06T20:20","Delete index.html","4fb2770"],["akshayaa-403","2026-04-06T20:21","Delete style.css","6203d92"],["akshayaa-403","2026-04-06T20:21","Delete script.js","f60f3f6"],["akshayaa-403","2026-04-06T21:21","Revise README with new sections and project links","1834c55"],["akshayaa-403","2026-04-06T21:27","README.md changes","a5e39bd"],["portfolio","2026-04-07T02:24","Update typing animation text array","c3f30bb"],["portfolio","2026-04-07T02:24","Update portfolio details with personal information","1c5cdee"],["akshayaa-403","2026-04-08T22:25","Delete style.css","6d260a3"],["akshayaa-403","2026-04-08T22:25","Delete script.js","9b987d3"],["akshayaa-403","2026-04-08T22:25","Delete index.html","a7789ab"],["akshayaa-403","2026-04-08T22:32","Modify GitHub Streak image parameters","8f459b1"],["portfolio","2026-04-09T22:48","Add Google Fonts link to index.html","1899e52"],["portfolio","2026-04-09T22:49","Add custom fonts to CSS variables","606bd02"],["portfolio","2026-04-09T22:53","Update 'Contact Me' button text to 'Get In Touch'","0b3b115"],["anttodo","2026-04-13T03:19","Revise README for improved clarity and organization","c2790b1"],["Habita","2026-04-19T20:56","Revise README for clarity and conciseness","02a6a33"],["Habita","2026-04-19T21:06","Update README.md","3bc864a"],["Habita","2026-04-19T21:36","Delete SETUP.md","37caac8"],["Habita","2026-04-20T23:47","Revise README for clarity and updated features","6d7f8fb"],["Habita","2026-04-20T23:54","Create index.html","eefb70a"],["Habita","2026-04-20T23:54","Delete public/index.html","bb8560d"],["yosemite-image-translation-gan","2026-04-21T00:35","Revise README for improved clarity and organization","dc5995e"],["Habita","2026-04-21T01:14","Fix email config","abfcc9b"],["Habita","2026-04-21T01:17","Merge branch 'main' of https://github.com/akshayaa-403/Habita","09f3388"],["Habita","2026-04-21T01:23","Update index.html","bf7e6a9"],["Habita","2026-04-21T01:23","Remove exclamation mark from welcome message","90195cf"],["Habita","2026-04-21T01:24","Merge branch 'main' of https://github.com/akshayaa-403/Habita","64b79fe"],["Habita","2026-04-21T01:31","Updated index.html to correct the paths for the stylesheet and JavaScript files","1df9032"],["Habita","2026-04-22T00:49","Update README formatting and content","9fdfa32"],["akshayaa-403","2026-04-22T00:52","Update README.md","db90be4"],["portfolio","2026-04-25T23:51","Updated website structure and added deployment workflow","548e4be"],["portfolio","2026-04-26T16:03","Fixed the deploy workflow and updated the index.html file.","175ed95"],["anttodo","2026-04-27T19:44","security tests and fixes","b6913f7"],["anttodo","2026-04-27T19:53","Updated Code Organization and Maintainability","78fc05e"],["anttodo","2026-04-28T14:36","Improved optimization and performance","781fdf9"],["anttodo","2026-04-28T14:52","Testing Changes","8d7194d"],["portfolio","2026-05-06T00:29","Updated File Structure and index.html","7fb0541"],["portfolio","2026-05-06T00:55","update index.html and add resume.pdf","adf9517"],["portfolio","2026-05-06T01:03","Update resume download link filename","83fc280"],["portfolio","2026-05-10T01:13","updated files structure:","4eddf5a"],["portfolio","2026-05-10T01:14","Merge branch 'main' of https://github.com/akshayaa-403/portfolio","2adeb07"],["portfolio","2026-05-10T02:48","Fixed resume download link","feb8c58"],["anttodo","2026-05-18T02:03","Updated changes","d384b93"],["portfolio","2026-05-24T03:30","Added Light/Dark Mode Toggle","3cad1d3"],["portfolio","2026-05-25T02:22","Added Project Details and View Blogs button. Removed Cooking and Photography Hob","36d06a3"],["portfolio","2026-05-26T22:20","Updated colors in CSS and other styling changes","150f379"],["portfolio","2026-05-26T22:29","Create README.md with project overview and setup","2b31db7"],["portfolio","2026-05-26T22:30","Delete all content from README.md","00372ad"],["Habita","2026-05-27T23:32","Updated structure completely. Added the Eisenhower matrix feature","918d772"],["Habita","2026-05-27T23:42","Styling Changes","3730ec9"],["Habita","2026-05-28T00:15","styling changes","0ed76d1"],["Habita","2026-05-28T20:44","File Structure Changes","27f2893"],["Habita","2026-05-28T21:02","Revise README with new project details and features","2b3d715"],["quantamental-screener","2026-05-29T12:15","Create .gitignore","1f51efb"],["quantamental-screener","2026-05-29T14:19","File structure changes","d6dc90d"],["quantamental-screener","2026-05-31T23:56","Added new files","c890482"],["quantamental-screener","2026-06-01T00:57","Fixed Universe selector now fetches tickers correctly. Added Streamlit caching","fdccc8d"],["quantamental-screener","2026-06-02T23:53","Removed test.py after testing for the correct ticker imports","cf575f6"],["quantamental-screener","2026-06-03T02:16","Created a new file structure from scratch","a8e739e"],["quantamental-screener","2026-06-04T00:32","feat: Implement scoring engine and universe selector for multi-factor equity scr","b71281e"],["quantamental-screener","2026-06-04T00:35","Updated README.md","3e1fe2f"],["quantamental-screener","2026-06-04T00:40","Updates","74b3479"],["quantamental-screener","2026-06-04T20:18","feat: Update API keys and refactor settings usage across data sources; remove de","15ce82a"],["akshayaa-403","2026-06-05T23:02","Update tech stack in README with new tools","a91773e"],["portfolio","2026-06-05T23:46","Updated favicon","af2fa00"],["akshayaa-403","2026-06-08T00:00","Update README.md","8069742"],["akshayaa-403","2026-06-08T00:12","Revise README content and project details","b8e8887"],["quantamental-screener","2026-06-08T01:18","Updated .env","4762c39"],["quantamental-screener","2026-06-08T02:01","Updated DataCollector Method","f6c1ce8"],["quantamental-screener","2026-06-09T01:13","Updated functions","c98a918"],["akshayaa-403","2026-06-10T20:28","Update README.md","0e4ba63"],["quantamental-screener","2026-06-10T20:30","Remove docstring from alpha_vantage.py","93f6b97"],["quantamental-screener","2026-06-11T23:23","Update backtest_engine.py","b090d73"],["quantamental-screener","2026-06-12T20:14","Fixed wide-format data issue, added mock sentiment fallback, corrected serializa","f03bdce"],["quantamental-screener","2026-06-12T23:48","Updated Docker files","d59e189"],["quantamental-screener","2026-06-13T00:02","Added Dev Container Folder","964bc86"],["quantamental-screener","2026-06-14T18:52","Replaced Mock Sentiment with Real News API","7b16078"],["Habita","2026-06-15T13:08","feat: redesign UI with new colors, quadrant names, axis labels, and draggable ce","2c50f1b"],["quantamental-screener","2026-06-16T13:01","Enhance UniverseSelector to fetch S&P 500 tickers with fallback options and impr","9663635"],["quantamental-screener","2026-06-17T16:41","Refactor and enhance quantamental screener","0ca604b"],["quantamental-screener","2026-06-17T19:37","Updates","f5d1baa"],["quantamental-screener","2026-06-18T14:16","Enhance logging utilities with retry decorator for network calls and update Univ","6822d26"],["akshayaa-403","2026-06-20T18:29","Update README.md","8c34e2c"],["quantamental-screener","2026-06-20T22:04","Enhance logging and error handling in backtest engine; refine universe selection","995b982"],["anttodo","2026-06-24T09:45","Update README.md","04c5173"],["anttodo","2026-06-24T10:48","feat: Add PlannerView and TaskBoard components for task management and planning","594e247"],["anttodo","2026-06-24T10:49","Merge branch 'main' of https://github.com/akshayaa-403/anttodo","3265c28"],["anttodo","2026-06-24T12:25","Fix: Upgrade pydantic to 2.10.4 to avoid Rust compilation error","49b3076"],["anttodo","2026-06-24T12:27","Fix: Updated python version requirements to avoid Rust compilation error","2376422"],["anttodo","2026-06-24T12:31","Pin Python to 3.12 and upgrade packages","f297f3d"],["anttodo","2026-06-24T13:09","Update README.md","8997def"],["akshayaa-403","2026-06-25T15:57","Replace Medium link with Substack and refine descriptions","e2667e7"],["quantamental-screener","2026-06-26T21:56","Update polygon.py","d7759e3"],["agent_project","2026-07-03T17:33","Initial Commit","db41b87"],["agent_project","2026-07-03T17:48","Fix: Add .gitignore, format code, and fix document saving in tools.py","b040e1b"],["agent_project","2026-07-03T17:56","Remove tracked folders and .env that should be ignored","91ed00a"],["agent_project","2026-07-05T00:46","Add HTML interface, JavaScript functionality, and CSS styling for the Autonomous","1c8020b"],["Habita","2026-07-06T16:33","feat: add .editorconfig for consistent coding styles","272e455"],["Habita","2026-07-06T16:41","fix: correct package name and add version and license information in package-loc","8dbbdb8"],["agent_project","2026-07-06T22:03","added architecture flowchart","5972754"],["quantamental-screener","2026-07-07T12:21","Add workflow for waking Streamlit app and implement wake script using Selenium","09a0517"],["quantamental-screener","2026-07-07T12:22","Added Selenium library","1d3aeb6"],["quantamental-screener","2026-07-09T23:41","Update ensemble_sentiment.py","a252afe"],["quantamental-screener","2026-07-10T22:55","Update benchmark_cache.py","b590166"],["quantamental-screener","2026-07-11T23:23","Update settings.py","504ad89"],["quantamental-screener","2026-07-12T23:17","Update test_factors.py","0e31080"],["o3_slack_bot","2026-07-13T12:51","Updated file structure for readability and added ocr benchmarks","5fe7a3c"],["o3_slack_bot","2026-07-13T16:54","feat: Update .gitignore and added result-textract.json for AWS credentials handl","a7dfa8e"],["o3_slack_bot","2026-07-14T11:39","feat: Update .gitignore files and enhance OCR engine configurations with environ","55ff8c2"],["o3_slack_bot","2026-07-14T16:09","Add PaddleOCR Lambda implementation and related files","62b1066"],["quantamental-screener","2026-07-14T23:04","Update scoring_engine.py","1a3dfa5"],["o3_slack_bot","2026-07-15T10:47","feat: Load environment variables from .env file and update benchmark results for","d132ffe"],["quantamental-screener","2026-07-15T14:22","feat: Add .env.example for environment variable configuration","e8e5377"],["quantamental-screener","2026-07-15T14:40","refactor: Remove unused cache and serialization utilities from utils","11be1a8"],["quantamental-screener","2026-07-15T14:56","Updated README.md","612968e"],["quantamental-screener","2026-07-15T14:56","feat: Update wake.yml schedule to run every 10 minutes; add optional finbert dep","e17a9df"],["o3_slack_bot","2026-07-16T17:31","feat: Update .gitignore, remove README, and add new JSON files for AWS deploymen","d37fd44"],["o3_slack_bot","2026-07-16T17:46","Merge upstream/master into test: live-agent, on-call, Jira, feedback sync","0ba1935"],["o3_slack_bot","2026-07-17T16:02","feat: Update benchmark results and summaries; add new environment files for AWS ","61fe183"],["phase-contrast-denoising","2026-07-23T13:25","Initial Commit","a196dac"],["portfolio","2026-08-04T23:55","feat: add squiggle effect and theme management scripts","51a67c8"],["portfolio","2026-08-05T12:58","feat: implement hover-to-play functionality for music card","1d8784a"],["quantamental-screener","2026-08-05T22:26","Remove emojis from button and captions","2b6071f"],["portfolio","2026-08-06T22:14","Enhance theme management and skills marquee functionality","1855407"],["anttodo","2026-08-06T23:07","Add comprehensive tests for engine and UI functionality","e052c5b"],["anttodo","2026-08-06T23:08","Merge branch 'main' of https://github.com/akshayaa-403/anttodo","d9a4cb0"],["anttodo","2026-08-10T16:49","Add .nojekyll file to prevent Jekyll processing on GitHub Pages","48361ae"],["anttodo","2026-08-10T17:14","Add CI workflow, enhance README, and improve accessibility in UI","22f4bc5"],["anttodo","2026-08-10T17:50","Refactor category color definitions and simplify catColor function","14a4446"],["Wikipedia-Summarizer","2026-08-11T01:09","Add core functionality for Wikipedia article summarization","331de85"],["Wikipedia-Summarizer","2026-08-11T01:15","Add pythonpath configuration for pytest to support local imports","6bd3429"],["Wikipedia-Summarizer","2026-08-11T23:10","Implement Wikipedia summarization pipeline with chunking, evaluation, and CLI in","6863a45"],["Wikipedia-Summarizer","2026-08-11T23:25","Remove chunking, CLI, evaluation, fetching, and summarization modules","e99ddba"],["Wikipedia-Summarizer","2026-08-12T10:46","Remove yLabel from renderMetrics function","f680ceb"],["Wikipedia-Summarizer","2026-08-12T11:28","Refactor README.md for clarity and consistency in presentation","e2cc876"],["Wikipedia-Summarizer","2026-08-12T11:29","Refactor README.md for clarity and consistency in presentation","b26e093"],["Wikipedia-Summarizer","2026-08-12T11:31","Update header formatting in README.md","6c83a5b"],["portfolio","2026-08-12T19:38","feat: enhance project details and add new projects","6eb01fc"],["Wikipedia-Summarizer","2026-08-12T19:55","Update README.md","bd14693"],["phase-contrast-denoising","2026-08-12T22:45","Add phase-contrast clean-up demo with interactive UI and sample images","175fd9b"],["yosemite-image-translation-gan","2026-08-12T22:45","Refactor CycleGAN codebase: remove unused modules and implement tests","911e778"],["Habita","2026-08-12T22:46","feat: implement timeline view for task scheduling and management","b1724c3"],["phase-contrast-denoising","2026-08-13T22:22","Add no-reference image quality measures and theme toggle functionality","647d4db"],["portfolio","2026-08-14T22:36","feat: enhance project detail page with formula rendering and code copy functiona","19852e3"],["portfolio","2026-08-14T23:55","Add new photography and artwork images, update hobby and project HTML, and enhan","0aee942"],["portfolio","2026-08-15T00:13","added .nojekyll file to prevent Jekyll processing","470a58c"],["portfolio","2026-08-15T12:03","Remove unused images and update hobby statistics in the project","590b946"],["portfolio","2026-08-16T11:38","Changes to structure of images in hobbies","20101e4"],["portfolio","2026-08-16T11:56","style: update figcaption styles for hobby images and adjust row calculation in g","4bdd04b"],["portfolio","2026-08-16T12:51","Changed caption of an image","2e0ae08"],["yosemite-image-translation-gan","2026-08-16T14:30","Enhance Yosemite CycleGAN demo with theme toggle and UI improvements","ebe5f60"],["akshayaa-403","2026-08-18T16:17","Replace Python and NLTK badges with JavaScript badge","2cb5667"],["quantamental-screener","2026-08-22T23:15","Update data_collector.py","f41bd35"],["portfolio","2026-08-22T23:45","fix: update hero role from Software Engineer to AI Engineer","25ffaa8"],["Habita","2026-08-24T20:37","Add initial HTML structure and CSS styles for Habita app","1efc437"],["Habita","2026-08-25T14:18","feat: implement settings drawer for calendar controls and integrate calendar lis","c215520"],["portfolio","2026-09-01T20:37","Add static site checks and new project pages","2d4fe60"],["portfolio","2026-09-07T22:05","feat: implement transparent cut-outs for hover frames and add placement editor","dfc0386"],["portfolio","2026-09-08T17:31","Refactor props in index.html and update hover behavior","ef902e0"],["portfolio","2026-09-13T23:49","Refactor JavaScript loading and data management for hobby pages","c515873"],["portfolio","2026-09-14T23:38","Refactor hobby page lightbox and enhance project details","caf76e4"],["portfolio","2026-09-15T00:56","Stop tracking .claude folder","aab9945"],["portfolio","2026-09-15T00:57","Refactor hobby image handling to use a shared lightbox component","30f1de6"],["portfolio","2026-09-15T23:00","Refactor project sections: rename \"Recently Made\" to \"Projects\", remove \"Other W","7a06c26"],["portfolio","2026-09-19T23:31","feat: add interactive diagrams and reading list to project detail page","d14ad86"],["Habita","2026-09-20T03:50","Updated .gitignore","135ba02"],["portfolio","2026-09-21T19:07","Refactor project detail rendering and enhance experience section","401e3f4"],["portfolio","2026-09-23T00:36","Refactor theme management, add traced data for figures, and enhance project data","82e02db"],["portfolio","2026-09-23T22:32","Enhance project interactivity and visual elements","e5469e0"]],"repos":[{"name":"akshayaa-403","code":"RM","created":"2025-01-16","pushed":"2026-08-18","desc":"the profile README — the page this dashboard reads against.","langs":{}},{"name":"Wikipedia-Summarizer","code":"WS","created":"2025-01-30","pushed":"2026-08-12","desc":"a browser tool comparing four extractive summarisers side by side, with a Playwright test suite.","langs":{"JavaScript":11777}},{"name":"yosemite-image-translation-gan","code":"GN","created":"2025-04-04","pushed":"2026-08-16","desc":"CycleGAN image-to-image translation on Yosemite photographs, with ONNX export and tests.","langs":{"Python":99520,"Jupyter Notebook":8614}},{"name":"quantamental-screener","code":"QS","created":"2025-09-22","pushed":"2026-08-22","desc":"ranks equities on momentum, volume, volatility and news sentiment; Streamlit front end, Docker image.","langs":{"Python":107171,"Dockerfile":356}},{"name":"portfolio","code":"PF","created":"2026-04-06","pushed":"2026-09-23","desc":"the portfolio site — static and buildless, hand-drawn canvas and SVG, no framework.","langs":{"JavaScript":378708,"CSS":127691,"HTML":88797,"Python":21661}},{"name":"anttodo","code":"AC","created":"2026-04-12","pushed":"2026-08-10","desc":"Ant Colony Optimisation finding the best order for a day’s tasks, drawn live on canvas.","langs":{"HTML":60241,"JavaScript":24356}},{"name":"Habita","code":"HB","created":"2026-04-19","pushed":"2026-09-19","desc":"an Eisenhower-matrix task manager that books time in the phone’s own calendar; Android via Capacitor.","langs":{"JavaScript":80240,"CSS":28326,"Java":25970,"HTML":8243}},{"name":"agent_project","code":"AG","created":"2026-07-03","pushed":"2026-07-06","desc":"a FastAPI service driving a local Ollama model, with python-docx output.","langs":{"Python":6386,"JavaScript":1483,"HTML":1246,"CSS":1050}},{"name":"o3_slack_bot","code":"O3","created":"2026-07-16","pushed":"2026-08-10","desc":"Project IVY — a Slack bot on AWS Lambda with OCR for images and the Anthropic SDK.","langs":{"Python":770622,"Dockerfile":2323}},{"name":"phase-contrast-denoising","code":"PC","created":"2026-07-23","pushed":"2026-08-13","desc":"a denoising pipeline for phase-contrast microscopy — PyTorch, OpenCV, a Gradio demo.","langs":{"Python":70290}}],"stack":[["Learn",[["PyTorch",["PC","GN","QS*"]],["Transformers",["QS*"]],["NumPy",["QS","PC","GN","O3"]],["pandas",["QS"]]]],["Vision",[["OpenCV",["PC","O3"]],["scikit-image",["PC","GN","O3"]]]],["LLM",[["Anthropic SDK",["O3"]],["Ollama",["AG"]]]],["Serve",[["Streamlit",["QS"]],["Gradio",["PC"]],["FastAPI",["AG"]],["Flask",["O3"]],["Capacitor",["HB"]]]],["Collect",[["Selenium",["QS"]],["BeautifulSoup",["QS"]]]],["Draw",[["Plotly",["QS"]],["Matplotlib",["QS","PC"]],["Canvas 2D",["AC","PF"]]]],["Ship",[["Docker",["QS","O3"]],["AWS Lambda",["O3"]],["pytest",["QS","GN"]],["Playwright",["WS"]]]]],"venn":[["Python","JavaScript","CSS","Pandas","NumPy","PyTorch","Transformers","OpenCV","Matplotlib","Seaborn","Plotly","Streamlit","Docker","Git","Jupyter","Selenium","BeautifulSoup"],["TypeScript","SQL","Scikit-learn","TensorFlow","LangChain","Power BI","Tableau","React","React Native","Next.js","Kubernetes","Azure","Vercel"],["Java","HTML","scikit-image","Gradio","FastAPI","Flask","Ollama","Anthropic SDK","AWS Lambda","Capacitor","Playwright"]]};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, a = {}) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const utc = s => new Date(s.slice(0,10) + 'T00:00:00Z');
+const iso = d => d.toISOString().slice(0,10);
+const fmtDay = s => { const d = utc(s); return `${WD[d.getUTCDay()]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const fmtShort = s => { const d = utc(s); return `${d.getUTCDate()} ${MON[d.getUTCMonth()]} ’${String(d.getUTCFullYear()).slice(2)}`; };
+
+const REPOS = D.repos;
+const byName = Object.fromEntries(REPOS.map(r => [r.name, r]));
+const LANG_VAR = { Python:'--py', JavaScript:'--js', CSS:'--css', HTML:'--html', Java:'--java' };
+const langColor = l => `var(${LANG_VAR[l] || '--other'})`;
+const COMMITS = D.commits.map(([repo, t, msg, sha]) => ({ repo, t, date: t.slice(0,10), hour: +t.slice(11,13), msg, sha }));
+const state = { repo: null };
+
+/* tooltip */
+const tip = $('#tip');
+function showTip(html, e) {
+  tip.innerHTML = html; tip.classList.add('on');
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+}
+const hideTip = () => tip.classList.remove('on');
+
+/* annular sector; angles in degrees, 0 = straight up, clockwise */
+function sector(cx, cy, r1, r2, a0, a1) {
+  const p = (r, a) => { const t = (a - 90) * Math.PI / 180; return [(cx + r * Math.cos(t)).toFixed(2), (cy + r * Math.sin(t)).toFixed(2)]; };
+  const L = a1 - a0 > 180 ? 1 : 0;
+  const [x1,y1] = p(r2,a0), [x2,y2] = p(r2,a1), [x3,y3] = p(r1,a1), [x4,y4] = p(r1,a0);
+  return `M${x1} ${y1}A${r2} ${r2} 0 ${L} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${L} 0 ${x4} ${y4}Z`;
+}
+const polar = (cx, cy, r, a) => { const t = (a - 90) * Math.PI / 180; return [cx + r * Math.cos(t), cy + r * Math.sin(t)]; };
+
+/* ---------- calendar-derived figures ---------- */
+const start = utc(D.start);
+const CAL = D.cal.map((n, i) => ({ date: iso(new Date(start.getTime() + i * 864e5)), n, i }));
+const total = CAL.reduce((s, d) => s + d.n, 0);
+const peak = CAL.reduce((a, b) => b.n > a.n ? b : a);
+let longest = 0, run = 0;
+for (const d of CAL) { run = d.n ? run + 1 : 0; longest = Math.max(longest, run); }
+let current = 0;
+for (let i = CAL.length - 1; i >= 0; i--) { if (CAL[i].n) current++; else if (i === CAL.length - 1) continue; else break; }
+const activeDays = CAL.filter(d => d.n).length;
+const lateShare = list => list.length ? Math.round(100 * list.filter(c => c.hour >= 20 || c.hour < 4).length / list.length) : 0;
+const commitsByDay = {};
+for (const c of COMMITS) (commitsByDay[c.date] ||= []).push(c);
+
+$('#figs').innerHTML = [
+  ['Contributions', total, 'last 12 mo'],
+  ['Active days', activeDays, `of ${CAL.length}`],
+  ['Longest streak', longest, longest === 1 ? 'day' : 'days'],
+  ['Commits', COMMITS.length, 'public, all time'],
+  ['After 8 pm', lateShare(COMMITS) + '%', 'of commits'],
+].map(([k, v, s]) => `<div><dt>${k}</dt><dd>${v}<small>${s}</small></dd></div>`).join('');
+
+/* ---------- the ring ---------- */
+const RC = 200, R0 = 86, RW = 13.4, GAP = 12, WEEKS = Math.ceil(CAL.length / 7);
+const STEP = (360 - GAP) / WEEKS, A0 = GAP / 2;
+const level = n => n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 10 ? 3 : n <= 20 ? 4 : 5;
+const cellGeom = i => { const w = Math.floor(i / 7), dow = i % 7; return { a0: A0 + w * STEP + .35, a1: A0 + (w + 1) * STEP - .35, r1: R0 + dow * RW + .6, r2: R0 + (dow + 1) * RW - .6 }; };
+const ring = $('#ring');
+{
+  const cells = el('g', { id: 'cells' });
+  for (const d of CAL) {
+    const g = cellGeom(d.i);
+    const p = el('path', { d: sector(RC, RC, g.r1, g.r2, g.a0, g.a1), class: 'cell', fill: `var(--l${level(d.n)})` });
+    p.dataset.i = d.i;
+    cells.append(p);
+  }
+  ring.append(cells);
+  // peak day outline
+  const g = cellGeom(peak.i);
+  ring.append(el('path', { d: sector(RC, RC, g.r1 - .6, g.r2 + .6, g.a0 - .35, g.a1 + .35), fill: 'none', stroke: 'var(--hot)', 'stroke-width': 1.6, 'pointer-events': 'none' }));
+  // month labels round the outside
+  const outer = R0 + 7 * RW;
+  let lastM = -1;
+  for (let w = 0; w < WEEKS; w++) {
+    const d = utc(CAL[Math.min(w * 7, CAL.length - 1)].date), m = d.getUTCMonth();
+    if (m === lastM) continue;
+    if (lastM !== -1 || d.getUTCDate() <= 7) {
+      const a = A0 + (w + .5) * STEP, [x, y] = polar(RC, RC, outer + 11, a);
+      const t = el('text', { x, y, class: m === 0 ? 'axis-y' : 'axis-t', 'text-anchor': 'middle', 'dominant-baseline': 'central' });
+      t.textContent = m === 0 ? '’' + String(d.getUTCFullYear()).slice(2) : MON[m];
+      ring.append(t);
+      ring.append(el('line', { x1: polar(RC,RC,outer+1,A0+w*STEP)[0], y1: polar(RC,RC,outer+1,A0+w*STEP)[1], x2: polar(RC,RC,outer+4,A0+w*STEP)[0], y2: polar(RC,RC,outer+4,A0+w*STEP)[1], stroke: 'var(--muted)', 'stroke-width': .8 }));
+    }
+    lastM = m;
+  }
+  // weekday letters up the seam at the top
+  'SMTWTFS'.split('').forEach((ch, k) => { const t = el('text', { x: RC, y: RC - (R0 + (k + .5) * RW), class: 'dow-t' }); t.textContent = ch; ring.append(t); });
+  ring.append(el('g', { id: 'overlay', 'pointer-events': 'none' }));
+}
+const ringCentre = $('#ring-centre');
+function ringRest() {
+  if (state.repo) {
+    const inWin = COMMITS.filter(c => c.repo === state.repo && c.date >= CAL[0].date);
+    const days = new Set(inWin.map(c => c.date)).size;
+    ringCentre.innerHTML = `<span class="big">${days}</span><span class="lbl">days with commits to<br>${esc(state.repo)}</span><span class="note">marked in red</span>`;
+  } else {
+    ringCentre.innerHTML = `<span class="big">${total}</span><span class="lbl">contributions<br>${MON[utc(CAL[0].date).getUTCMonth()]} ’${CAL[0].date.slice(2,4)} – ${MON[utc(CAL.at(-1).date).getUTCMonth()]} ’${CAL.at(-1).date.slice(2,4)}</span><span class="note">loudest: ${peak.n} on ${utc(peak.date).getUTCDate()} ${MON[utc(peak.date).getUTCMonth()]}</span>`;
+  }
+}
+ring.addEventListener('pointerover', e => {
+  const i = e.target.dataset?.i; if (i == null) return;
+  const d = CAL[+i], cs = (commitsByDay[d.date] || []).filter(c => !state.repo || c.repo === state.repo);
+  const first = cs[0];
+  ringCentre.innerHTML = `<span class="big">${d.n}</span><span class="lbl">${d.n === 1 ? 'contribution' : 'contributions'}<br>${fmtDay(d.date)}</span>` +
+    (first ? `<span class="msg">${esc(first.repo)}: ${esc(first.msg)}${cs.length > 1 ? ` <em>+${cs.length - 1} more</em>` : ''}</span>` : '');
+});
+ring.addEventListener('pointerleave', ringRest);
+function ringOverlay() {
+  const ov = $('#overlay'); ov.replaceChildren();
+  ring.classList.toggle('ring-muted', !!state.repo);
+  if (!state.repo) return;
+  const idx = Object.fromEntries(CAL.map(d => [d.date, d.i]));
+  for (const date of new Set(COMMITS.filter(c => c.repo === state.repo).map(c => c.date))) {
+    if (idx[date] == null) continue;
+    const g = cellGeom(idx[date]), [x, y] = polar(RC, RC, (g.r1 + g.r2) / 2, (g.a0 + g.a1) / 2);
+    ov.append(el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: 3.4, fill: 'var(--hot)', stroke: 'var(--panel)', 'stroke-width': 1 }));
+  }
+}
+
+/* ---------- the clock ---------- */
+const clock = $('#clock'), CC = 150, CR0 = 58, CR1 = 130;
+function drawClock(list) {
+  clock.replaceChildren();
+  const hours = Array(24).fill(0); list.forEach(c => hours[c.hour]++);
+  const max = Math.max(1, ...hours);
+  const step = max <= 6 ? 2 : max <= 15 ? 5 : 10;
+  const len = n => (n / max) * (CR1 - CR0);
+  clock.append(el('path', { d: sector(CC, CC, CR0, CR1 + 4, 300, 420), fill: 'var(--night)' }));
+  for (let v = step; v <= max; v += step) {
+    clock.append(el('circle', { cx: CC, cy: CC, r: CR0 + len(v), fill: 'none', stroke: 'var(--line)', 'stroke-width': .7, 'stroke-dasharray': '2 3' }));
+    const t = el('text', { x: CC + 3, y: CC - CR0 - len(v) - 2, class: 'axis-t', 'font-size': 8 }); t.textContent = v; clock.append(t);
+  }
+  clock.append(el('circle', { cx: CC, cy: CC, r: CR0, fill: 'none', stroke: 'var(--line)', 'stroke-width': .8 }));
+  hours.forEach((n, h) => {
+    if (!n) return;
+    const p = el('path', { d: sector(CC, CC, CR0 + 1, CR0 + 1 + len(n), h * 15 + 1.4, h * 15 + 13.6), class: 'clock-bar' + (h >= 20 || h < 4 ? ' night' : '') });
+    p.addEventListener('pointermove', e => showTip(`<b>${String(h).padStart(2,'0')}:00–${String(h).padStart(2,'0')}:59</b><br>${n} commit${n > 1 ? 's' : ''}`, e));
+    p.addEventListener('pointerleave', hideTip);
+    clock.append(p);
+  });
+  [['00', 0], ['06', 90], ['12', 180], ['18', 270]].forEach(([s, a]) => {
+    const [x, y] = polar(CC, CC, CR1 + 13, a);
+    const t = el('text', { x, y, class: 'axis-t', 'text-anchor': 'middle', 'dominant-baseline': 'central' }); t.textContent = s; clock.append(t);
+  });
+  const top = hours.indexOf(max);
+  $('#clock-centre').innerHTML = `<span class="big">${lateShare(list)}%</span><span class="lbl">after 8 pm</span>`;
+  $('#clock-note').textContent = `busiest hour: ${String(top).padStart(2,'0')}:00`;
+}
+function drawWeek(list) {
+  const c = Array(7).fill(0); list.forEach(x => c[utc(x.date).getUTCDay()]++);
+  const order = [1,2,3,4,5,6,0], max = Math.max(1, ...c);
+  $('#week').innerHTML = order.map(d => `<div class="${d === 0 || d === 6 ? 'wk' : ''}" title="${WD[d]}: ${c[d]} commits"><b style="height:${(c[d] / max * 100).toFixed(1)}%"></b><span>${WD[d][0]}</span></div>`).join('');
+}
+
+/* ---------- lifelines ---------- */
+const T0 = utc('2025-01-01').getTime(), T1 = utc('2026-10-01').getTime();
+const xp = s => ((utc(s).getTime() - T0) / (T1 - T0) * 100).toFixed(2) + '%';
+const counts = {}; COMMITS.forEach(c => counts[c.repo] = (counts[c.repo] || 0) + 1);
+const langBar = langs => { const tot = Object.values(langs).reduce((a, b) => a + b, 0) || 1; return Object.entries(langs).sort((a, b) => b[1] - a[1]).map(([l, b]) => `<i style="width:${(b / tot * 100).toFixed(2)}%;background:${langColor(l)}" title="${esc(l)} ${(b / tot * 100).toFixed(1)}%"></i>`).join(''); };
+const primary = r => Object.entries(r.langs).sort((a, b) => b[1] - a[1])[0]?.[0];
+{
+  const life = $('#life');
+  const ticks = ['2025-01-01','2025-04-01','2025-07-01','2025-10-01','2026-01-01','2026-04-01','2026-07-01']
+    .map(s => `<span style="left:${xp(s)}">${s.slice(5,7) === '01' ? '’' + s.slice(2,4) : MON[+s.slice(5,7) - 1]}</span>`).join('');
+  let html = `<div class="axis" aria-hidden="true"><span>repo</span><div class="ticks">${ticks}</div><span>languages</span><span style="text-align:right">n</span></div>`;
+  for (const r of REPOS) {
+    const cs = COMMITS.filter(c => c.repo === r.name);
+    const tickHtml = cs.map((c, k) => `<i class="tick" data-c="${COMMITS.indexOf(c)}" style="left:${xp(c.date)};background:${langColor(primary(r))}"></i>`).join('');
+    html += `<button class="row" type="button" data-repo="${esc(r.name)}" aria-pressed="false">
+      <span class="nm"><i style="background:${langColor(primary(r))}"></i>${esc(r.name)}</span>
+      <span class="track"><span class="win" style="left:${xp(CAL[0].date)};right:calc(100% - ${xp(CAL.at(-1).date)})"></span><span class="span" style="left:${xp(r.created)};right:calc(100% - ${xp(r.pushed)})"></span><span class="born" style="left:${xp(r.created)}"></span>${tickHtml}</span>
+      <span class="langbar">${langBar(r.langs)}</span>
+      <span class="n">${counts[r.name] || 0}</span></button>`;
+  }
+  life.innerHTML = html;
+  life.addEventListener('pointerover', e => {
+    const k = e.target.dataset?.c;
+    if (k != null) { const c = COMMITS[+k]; showTip(`<b>${esc(c.repo)}</b> · ${fmtDay(c.date)} ${c.t.slice(11)}<br>${esc(c.msg)}`, e); }
+    else if (e.target.classList?.contains('born')) showTip('repository created', e);
+    else if (e.target.classList?.contains('win')) showTip('the twelve months the ring covers', e);
+    else hideTip();
+  });
+  life.addEventListener('pointerleave', hideTip);
+  life.addEventListener('click', e => { const b = e.target.closest('.row'); if (b) select(b.dataset.repo); });
+}
+const totals = {}; REPOS.forEach(r => Object.entries(r.langs).forEach(([l, b]) => totals[l] = (totals[l] || 0) + b));
+function drawFoot() {
+  const foot = $('#life-foot');
+  if (state.repo) {
+    const r = byName[state.repo], tot = Object.values(r.langs).reduce((a, b) => a + b, 0) || 1;
+    const langs = Object.entries(r.langs).sort((a, b) => b[1] - a[1]).map(([l, b]) => `${esc(l)} ${(b / tot * 100).toFixed(b / tot < .1 ? 1 : 0)}%`).join(' · ') || 'no code — Markdown only';
+    foot.innerHTML = `<p><b>${esc(r.name)}</b> — ${esc(r.desc)}</p><p>created ${fmtShort(r.created)} · last push ${fmtShort(r.pushed)} · ${counts[r.name] || 0} commits · ${langs} · <a href="https://github.com/akshayaa-403/${encodeURIComponent(r.name)}" target="_blank" rel="noreferrer">open on GitHub</a></p>`;
+  } else {
+    const g = { ...totals }; const other = ['Dockerfile', 'Jupyter Notebook'].reduce((s, k) => s + (g[k] || 0), 0); delete g.Dockerfile; delete g['Jupyter Notebook']; g.Other = other;
+    const tot = Object.values(g).reduce((a, b) => a + b, 0);
+    const ent = Object.entries(g).sort((a, b) => b[1] - a[1]);
+    foot.innerHTML = `<div class="langbar">${langBar(g)}</div><div class="keys">${ent.map(([l, b]) => `<span><i style="background:${langColor(l)}"></i>${esc(l)} ${(b / tot * 100).toFixed(1)}%</span>`).join('')}<span style="color:var(--muted)">by bytes, all ten repos</span></div>`;
+  }
+}
+
+/* ---------- evidence matrix ---------- */
+const COLS = REPOS.filter(r => r.code !== 'RM');
+{
+  const mx = $('#mx');
+  let h = `<span></span><span></span>` + COLS.map(r => `<button type="button" class="ch" data-repo="${esc(r.name)}" title="${esc(r.name)}">${r.code}</button>`).join('');
+  for (const [fam, libs] of D.stack) {
+    libs.forEach(([lib, where], k) => {
+      h += k === 0 ? `<span class="fam" style="grid-row:span ${libs.length}">${esc(fam)}</span>` : '';
+      h += `<span class="lib" role="rowheader">${esc(lib)}</span>` + COLS.map(r => {
+        const hit = where.find(w => w.replace('*', '') === r.code);
+        return `<span class="c" data-col="${r.code}" title="${esc(lib)} · ${esc(r.name)}${hit ? (hit.endsWith('*') ? ' (optional extra)' : '') : ': not used'}"><i class="${hit ? 'dot' + (hit.endsWith('*') ? ' opt' : '') : 'ghost'}"></i></span>`;
+      }).join('');
+    });
+  }
+  mx.innerHTML = h;
+  mx.addEventListener('click', e => { const b = e.target.closest('.ch'); if (b) select(b.dataset.repo); });
+}
+
+/* ---------- README vs code ---------- */
+{
+  const [both, readme, code] = D.venn;
+  const n = both.length + readme.length + code.length;
+  $('#venn-meta').textContent = `${both.length} of ${both.length + readme.length} badges backed`;
+  const col = (title, list, cls) => `<div><h3><span>${title}</span><span>${list.length}</span></h3><div class="chips">${list.map(x => `<span class="chip ${cls}">${esc(x)}</span>`).join('')}</div></div>`;
+  $('#venn').innerHTML = `<div class="split" aria-hidden="true"><i class="sw-both" style="flex:${both.length}"></i><i class="sw-readme" style="flex:${readme.length}"></i><i class="sw-code" style="flex:${code.length}"></i></div>
+    <p class="note" style="margin:0">public repos only — private work can’t show here</p>
+    <div class="cols">${col('Both', both, 'both')}${col('README only', readme, 'readme')}${col('Code only', code, 'code')}</div>`;
+}
+
+/* ---------- words ---------- */
+const CONV = /^(feat|fix|refactor|chore|docs|test|style|perf|ci|build)(\([^)]*\))?!?:\s*/i;
+const NORM = { updated:'update', added:'add', created:'create', removed:'remove', deleted:'delete', revised:'revise', fixed:'fix', enhanced:'enhance', refactored:'refactor', implemented:'implement', improved:'improve', adds:'add', updates:'update' };
+function drawWords(list) {
+  const f = {};
+  for (const c of list) {
+    const w = (c.msg.replace(CONV, '').match(/[A-Za-z]+/) || [''])[0].toLowerCase();
+    if (!w) continue; const k = NORM[w] || w; f[k] = (f[k] || 0) + 1;
+  }
+  const top = Object.entries(f).sort((a, b) => b[1] - a[1]).slice(0, 9), max = top[0]?.[1] || 1;
+  $('#spec').innerHTML = top.map(([w, n]) => `<span style="font-size:${(11 + 19 * Math.sqrt(n / max)).toFixed(1)}px;opacity:${(.55 + .45 * n / max).toFixed(2)}">${esc(w)}<sup>${n}</sup></span>`).join('') || '<span>—</span>';
+  const conv = list.filter(c => CONV.test(c.msg)).length;
+  $('#strip').innerHTML = list.map(c => `<i class="${CONV.test(c.msg) ? 'cv' : ''}"></i>`).join('');
+  const firstConv = list.find(c => CONV.test(c.msg));
+  $('#strip-cap').innerHTML = `<span>${list.length ? fmtShort(list[0].date) : ''}</span><span><b style="color:var(--hot);font-weight:500">${Math.round(100 * conv / (list.length || 1))}%</b> conventional (<code>feat:</code> <code>fix:</code> …)${firstConv ? ' since ' + fmtShort(firstConv.date) : ''}</span><span>${list.length ? fmtShort(list.at(-1).date) : ''}</span>`;
+  $('#log').innerHTML = list.slice(-10).reverse().map(c => `<li><time datetime="${c.t}">${fmtShort(c.date)} ${c.t.slice(11)}</time><span><b>${esc(c.repo)}</b> ${esc(c.msg)}</span></li>`).join('');
+}
+
+/* ---------- selection ---------- */
+function select(name) {
+  state.repo = state.repo === name ? null : name;
+  const list = state.repo ? COMMITS.filter(c => c.repo === state.repo) : COMMITS;
+  drawClock(list); drawWeek(list); drawWords(list); drawFoot(); ringOverlay(); ringRest();
+  document.querySelectorAll('.row').forEach(b => b.setAttribute('aria-pressed', b.dataset.repo === state.repo));
+  const code = state.repo && byName[state.repo].code;
+  document.querySelectorAll('.mx [data-col], .mx .ch').forEach(x => x.classList.toggle('sel', !!code && (x.dataset.col === code || x.dataset.repo === state.repo)));
+  document.querySelectorAll('[data-filter]').forEach(f => {
+    f.hidden = !state.repo;
+    f.innerHTML = state.repo ? `${esc(state.repo)} <button type="button" aria-label="Clear filter">×</button>` : '';
+  });
+}
+document.addEventListener('click', e => { if (e.target.closest('[data-filter] button')) select(state.repo); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && state.repo) select(state.repo); });
+select(null);
+</script>
+
+</body>
+</html>
