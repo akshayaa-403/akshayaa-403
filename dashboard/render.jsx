@@ -32,6 +32,7 @@ const PROJECTS = [
     url: 'https://akshayaa-403.github.io/Wikipedia-Summarizer/', expect: 'Four algorithms', kind: 'demo' },
   { group: 'Products', name: 'Habita', repo: 'Habita', note: 'no published build' },
   { group: 'Products', name: 'Arteza', url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
+  { group: 'Products', name: 'notes', repo: 'notes', note: 'offline web app, not deployed' },
   { group: 'Experiments', name: 'anttodo', repo: 'anttodo',
     url: 'https://akshayaa-403.github.io/anttodo/', expect: 'Ant Colony', kind: 'demo' },
   { group: 'Experiments', name: 'agent_project', repo: 'agent_project', note: 'runs locally' },

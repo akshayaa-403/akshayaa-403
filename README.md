@@ -1,13 +1,8 @@
 <div align="center">
 
-<h2>Akshayaa Kashyap</h2>
+<h3>Akshayaa Kashyap</h3>
 
-<samp>AI engineer · India</samp><br>
 <samp><a href="https://akshayaa-403.github.io/portfolio/">portfolio</a> · <a href="https://linkedin.com/in/akshayaa-kashyap">linkedin</a> · <a href="https://akshayaakashyap.substack.com">substack</a> · <a href="https://akshayaa-403.github.io/portfolio/public/assets/resume.pdf">résumé</a> · akshayaakashyap5@gmail.com</samp>
-
-<br>
-
-I build tools that turn messy data (noisy micrographs, market prices and news, long articles) into results you can check.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/akshayaa-403/akshayaa-403/output/dashboard-dark.svg">
@@ -26,7 +21,8 @@ I build tools that turn messy data (noisy micrographs, market prices and news, l
 <tr>
 <td><b>Products</b></td>
 <td valign="top"><b><a href="https://github.com/akshayaa-403/Habita">Habita</a></b><br><sub>Eisenhower matrix that writes to your phone's calendar. <a href="https://akshayaa-403.github.io/portfolio/work/habita.html">case study</a></sub></td>
-<td valign="top" colspan="2"><b><a href="https://arteza.site">Arteza</a></b><br><sub>Storefront for an original-art studio (client work). <a href="https://arteza.site">live</a> · <a href="https://akshayaa-403.github.io/portfolio/work/arteza.html">case study</a></sub></td>
+<td valign="top"><b><a href="https://arteza.site">Arteza</a></b><br><sub>Storefront for an original-art studio (client work). <a href="https://arteza.site">live</a> · <a href="https://akshayaa-403.github.io/portfolio/work/arteza.html">case study</a></sub></td>
+<td valign="top"><b><a href="https://github.com/akshayaa-403/notes">notes</a></b><br><sub>Boards of cards, a picture calendar and a pomodoro timer; offline, stays on your device.</sub></td>
 </tr>
 <tr>
 <td><b>Experiments</b></td>
