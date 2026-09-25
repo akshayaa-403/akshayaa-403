@@ -1,0 +1,36 @@
+name: Contribution calendar
+
+# Redraws the contribution calendar the README shows, so the profile never
+# depends on a third-party image server being up. The SVGs are published to
+# the `output` branch; main only ever holds the README and its figures.
+
+on:
+  schedule:
+    - cron: "30 18 * * *"   # 00:00 IST
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/contributions.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/contributions.svg?palette=github-light&color_snake=#094e94
+            dist/contributions-dark.svg?palette=github-dark&color_snake=#8bbcf0
+
+      - uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: Redraw contribution calendar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
