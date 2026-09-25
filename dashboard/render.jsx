@@ -24,7 +24,7 @@ const TOKEN = process.env.GITHUB_TOKEN;
    to rendering the README still answers 200. */
 const PROJECTS = [
   { group: 'Research', name: 'Phase-contrast clean-up', repo: 'phase-contrast-denoising',
-    url: 'https://akshayaa-403.github.io/phase-contrast-denoising/', expect: 'interactive halo suppression', kind: 'demo' },
+    url: 'https://akshayaa-403.github.io/phase-contrast-denoising/docs/', expect: 'interactive halo suppression', kind: 'demo' },
   { group: 'Research', name: 'Quantamental Screener', repo: 'quantamental-screener',
     // The app itself answers a script with a sign-in redirect loop; its health endpoint does not.
     url: 'https://quantamental-screener.streamlit.app/~/+/_stcore/health', expect: 'ok', kind: 'app' },
