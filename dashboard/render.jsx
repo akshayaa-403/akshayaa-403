@@ -30,13 +30,15 @@ const PROJECTS = [
     url: 'https://quantamental-screener.streamlit.app/~/+/_stcore/health', expect: 'ok', kind: 'app' },
   { group: 'Research', name: 'Wikipedia Summarizer', repo: 'Wikipedia-Summarizer',
     url: 'https://akshayaa-403.github.io/Wikipedia-Summarizer/', expect: 'Four algorithms', kind: 'demo' },
-  { group: 'Products', name: 'Habita', repo: 'Habita', note: 'no published build' },
-  { group: 'Products', name: 'Arteza', url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
-  { group: 'Products', name: 'notes', repo: 'notes', note: 'offline web app, not deployed' },
+  { group: 'Products', name: 'Habita', repo: 'Habita',
+    url: 'https://akshayaa-403.github.io/Habita/src/index.html', expect: 'Eisenhower Matrix', kind: 'app' },
+  // Private repo, so the API can't see it; language is its own split (TypeScript 83.9%).
+  { group: 'Products', name: 'Arteza', lang: 'TypeScript', private: true,
+    url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
+  { group: 'Products', name: 'notes', repo: 'notes',
+    url: 'https://akshayaa-403.github.io/notes/', expect: '<title>Notes', kind: 'app' },
   { group: 'Experiments', name: 'anttodo', repo: 'anttodo',
     url: 'https://akshayaa-403.github.io/anttodo/', expect: 'Ant Colony', kind: 'demo' },
-  { group: 'Experiments', name: 'agent_project', repo: 'agent_project', note: 'runs locally' },
-  { group: 'Experiments', name: 'yosemite-image-translation-gan', repo: 'yosemite-image-translation-gan', note: 'weights not published' },
 ];
 
 const THEMES = {
@@ -173,7 +175,7 @@ function Row({ t, p, first }) {
       <div style={{ display: 'flex', width: 104, fontSize: 11, fontFamily: 'Plex Mono', color: first ? t.accent : 'transparent', letterSpacing: 1 }}>{p.group.toUpperCase()}</div>
       <div style={{ display: 'flex', width: 260, fontSize: 14, fontWeight: 600, color: t.ink }}>{p.name}</div>
       <div style={{ display: 'flex', width: 110, fontSize: 12, fontFamily: 'Plex Mono', color: t.muted }}>{p.lang || '—'}</div>
-      <div style={{ display: 'flex', width: 150, fontSize: 12, color: t.muted }}>{p.pushed ? `pushed ${ago(p.pushed)}` : 'no public repo'}</div>
+      <div style={{ display: 'flex', width: 150, fontSize: 12, color: t.muted }}>{p.pushed ? `pushed ${ago(p.pushed)}` : p.private ? 'private repo' : 'no public repo'}</div>
       <div style={{ display: 'flex', flex: 1 }}><Status t={t} p={p} /></div>
     </div>
   );
@@ -186,7 +188,7 @@ function Dashboard({ t, cal, s, projects, stamp }) {
       <div style={{ display: 'flex', alignItems: 'center', fontFamily: 'Plex Mono', fontSize: 12, color: t.muted }}>
         <div style={{ display: 'flex', width: 8, height: 8, marginRight: 8 }} />{/* the pulsing dot is drawn over this after layout */}
         <span style={{ color: t.up, fontWeight: 600, marginRight: 10 }}>LIVE</span>
-        <span>{`${USER} · rebuilt ${stamp}`}</span>
+        <span>{`${USER} · last updated ${stamp}`}</span>
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
@@ -218,7 +220,7 @@ const [cal, rs] = await Promise.all([calendar(), repos()]);
 const s = streaks(cal.weeks);
 const projects = await Promise.all(PROJECTS.map(async p => {
   const r = p.repo && rs[p.repo];
-  return { ...p, lang: r?.language, pushed: r?.pushed_at, live: await up(p) };
+  return { ...p, lang: p.lang || r?.language, pushed: r?.pushed_at, live: await up(p) };
 }));
 const ist = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric',
   hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map(x => [x.type, x.value]));
@@ -230,7 +232,7 @@ for (const [name, t] of Object.entries(THEMES)) {
   let svg = await satori(<Dashboard t={t} cal={cal} s={s} projects={projects} stamp={stamp} />, { width: W, height: H, fonts: FONTS });
   // Satori draws static SVG; the one moving part is added here with SMIL, which GitHub's image proxy keeps.
   const dot = `<circle cx="${PAD + 4}" cy="${PAD + 8}" r="4" fill="${t.up}"><animate attributeName="opacity" values="1;0.2;1" dur="1.8s" repeatCount="indefinite"/></circle>`;
-  svg = svg.replace(/<\/svg>\s*$/, `<title>Live dashboard for ${USER}: ${cal.total} contributions in the last year, a ${s.current}-day current streak, and the status of each project's demo, rebuilt ${stamp}.</title>${dot}</svg>`);
+  svg = svg.replace(/<\/svg>\s*$/, `<title>Live dashboard for ${USER}: ${cal.total} contributions in the last year, a ${s.current}-day current streak, and the status of each project's demo, last updated ${stamp}.</title>${dot}</svg>`);
   fs.writeFileSync(path.join(OUT, `dashboard-${name}.svg`), svg);
 }
 console.log(JSON.stringify({ total: cal.total, ...s, stamp, projects: projects.map(p => [p.name, p.lang, p.pushed?.slice(0, 10), p.live]) }, null, 1));
