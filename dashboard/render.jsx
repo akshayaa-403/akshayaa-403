@@ -35,9 +35,6 @@ const PROJECTS = [
   // Private repo, so the API can't see it; language is its own split (TypeScript 83.9%).
   { group: 'Products', name: 'Arteza', lang: 'TypeScript', private: true,
     url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
-  // Render's free plan sleeps when idle; a cold start can take longer than the 20 s check.
-  { group: 'Products', name: 'Ask the CRM', repo: 'artenos',
-    url: 'https://ask-the-crm.onrender.com/api/health', expect: '"ok":true', kind: 'app' },
   { group: 'Products', name: 'notes', repo: 'notes',
     url: 'https://akshayaa-403.github.io/notes/', expect: '<title>Notes', kind: 'app' },
   { group: 'Experiments', name: 'anttodo', repo: 'anttodo',
