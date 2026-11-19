@@ -14,9 +14,15 @@
 <table>
 <tr>
 <td><b>Research</b></td>
+<<<<<<< HEAD
 <td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/phase-contrast-denoising">Phase-contrast clean-up</a></b><br><sub>Halo removal for microscopy; Otsu Dice 0.08 → 0.94 on 30 held-out synthetic frames, 0.10 → 0.61 on real cells. <a href="https://akshayaa-403.github.io/phase-contrast-denoising/">demo</a> · <a href="https://akshayaa-403.github.io/portfolio/work/phase-contrast-denoising.html">case study</a></sub></td>
 <td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/quantamental-screener">Quantamental Screener</a></b><br><sub>S&amp;P 500 ranked on four factors; beat the index in backtest, but not luck (p = 0.07), and lost on the holdout. <a href="https://quantamental-screener.streamlit.app">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/quantamental-screener.html">case study</a></sub></td>
 <td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/Wikipedia-Summarizer">Wikipedia Summarizer</a></b><br><sub>Four summarisers scored against the human-written lead. <a href="https://akshayaa-403.github.io/Wikipedia-Summarizer/">demo</a> · <a href="https://github.com/akshayaa-403/Wikipedia-Summarizer#how-well-do-they-work">results</a></sub></td>
+=======
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/phase-contrast-denoising">Phase-contrast clean-up</a></b><br><sub>Halo removal for microscopy; PSNR 12.87 → 20.62 dB. <a href="https://akshayaa-403.github.io/phase-contrast-denoising/">demo</a> · <a href="https://akshayaa-403.github.io/portfolio/work/phase-contrast-denoising.html">case study</a></sub></td>
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/quantamental-screener">Quantamental Screener</a></b><br><sub>S&amp;P 500 ranked on four factors; lost its backtest to the index. <a href="https://quantamental-screener.streamlit.app">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/quantamental-screener.html">case study</a></sub></td>
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/Wikipedia-Summarizer">Wikipedia Summarizer</a></b><br><sub>Four summarisers scored against the human-written lead. <a href="https://akshayaa-403.github.io/Wikipedia-Summarizer/">demo</a> · <a href="https://akshayaa-403.github.io/portfolio/work/wikipedia-summarizer.html">case study</a></sub></td>
+>>>>>>> eaa9eebec1e162a1978c759c22e02cd317390071
 </tr>
 <tr>
 <td><b>Products</b></td>
