@@ -24,7 +24,7 @@ const TOKEN = process.env.GITHUB_TOKEN;
    to rendering the README still answers 200. */
 const PROJECTS = [
   { group: 'Research', name: 'Phase-contrast clean-up', repo: 'phase-contrast-denoising',
-    url: 'https://akshayaa-403.github.io/phase-contrast-denoising/', expect: 'interactive halo suppression', kind: 'demo' },
+    url: 'https://akshayaa-403.github.io/phase-contrast-denoising/', expect: '<title>Phase-Contrast Clean-Up', kind: 'demo' },
   { group: 'Research', name: 'Quantamental Screener', repo: 'quantamental-screener',
     // The app itself answers a script with a sign-in redirect loop; its health endpoint does not.
     url: 'https://quantamental-screener.streamlit.app/~/+/_stcore/health', expect: 'ok', kind: 'app' },
@@ -35,6 +35,9 @@ const PROJECTS = [
   // Private repo, so the API can't see it; language is its own split (TypeScript 83.9%).
   { group: 'Products', name: 'Arteza', lang: 'TypeScript', private: true,
     url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
+  // Render's free plan sleeps when idle; a cold start can take longer than the 20 s check.
+  { group: 'Products', name: 'Ask the CRM', repo: 'artenos',
+    url: 'https://ask-the-crm.onrender.com/api/health', expect: '"ok":true', kind: 'app' },
   { group: 'Products', name: 'notes', repo: 'notes',
     url: 'https://akshayaa-403.github.io/notes/', expect: '<title>Notes', kind: 'app' },
   { group: 'Experiments', name: 'anttodo', repo: 'anttodo',
