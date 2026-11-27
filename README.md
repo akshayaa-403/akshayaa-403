@@ -14,20 +14,20 @@
 <table>
 <tr>
 <td><b>Research</b></td>
-<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/phase-contrast-denoising">Phase-contrast clean-up</a></b><br><sub>Halo removal for microscopy; Otsu Dice 0.08 → 0.94 on 30 held-out synthetic frames, 0.10 → 0.61 on real cells. <a href="https://akshayaa-403.github.io/phase-contrast-denoising/">demo</a> · <a href="https://akshayaa-403.github.io/portfolio/work/phase-contrast-denoising.html">case study</a></sub></td>
-<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/quantamental-screener">Quantamental Screener</a></b><br><sub>S&amp;P 500 ranked on four factors; beat the index in backtest, but not luck (p = 0.07). <a href="https://quantamental-screener.streamlit.app">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/quantamental-screener.html">case study</a></sub></td>
-<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/Wikipedia-Summarizer">Wikipedia Summarizer</a></b><br><sub>Four summarisers scored against the human-written lead. <a href="https://akshayaa-403.github.io/Wikipedia-Summarizer/">demo</a> · <a href="https://github.com/akshayaa-403/Wikipedia-Summarizer#how-well-do-they-work">results</a></sub></td>
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/phase-contrast-denoising">Phase-contrast clean-up</a></b><br><sub>Strips the halos from phase-contrast microscopy so cells segment cleanly: Otsu Dice 0.08 → 0.94 on held-out synthetic frames, 0.10 → 0.61 on real cells. <a href="https://akshayaa-403.github.io/phase-contrast-denoising/">demo</a> · <a href="https://akshayaa-403.github.io/portfolio/work/phase-contrast-denoising.html">case study</a></sub></td>
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/quantamental-screener">Quantamental Screener</a></b><br><sub>Ranks the S&amp;P 500 on momentum, news sentiment, volume and volatility, with company-specific headlines linked to their source and a backtest against the index. <a href="https://quantamental-screener.streamlit.app">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/quantamental-screener.html">case study</a></sub></td>
+<td width="30%" valign="top"><b><a href="https://github.com/akshayaa-403/Wikipedia-Summarizer">Wikipedia Summarizer</a></b><br><sub>Runs four summarisers (TextRank, LSA, Luhn, MMR) on any article and scores each against Wikipedia's own human-written lead. <a href="https://akshayaa-403.github.io/Wikipedia-Summarizer/">demo</a> · <a href="https://github.com/akshayaa-403/Wikipedia-Summarizer#how-well-do-they-work">results</a></sub></td>
 </tr>
 <tr>
 <td><b>Products</b></td>
-<td valign="top"><b><a href="https://github.com/akshayaa-403/Habita">Habita</a></b><br><sub>Eisenhower matrix that writes to your phone's calendar. <a href="https://akshayaa-403.github.io/Habita/src/index.html">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/habita.html">case study</a></sub></td>
-<td valign="top"><b><a href="https://arteza.site">Arteza</a></b><br><sub>Storefront for an original-art studio (client work, private repo). <a href="https://arteza.site">live</a> · <a href="https://akshayaa-403.github.io/portfolio/work/arteza.html">case study</a></sub></td>
-<td valign="top"><b><a href="https://github.com/akshayaa-403/notes">notes</a></b><br><sub>Boards of cards, a picture calendar, a pomodoro timer and a PDF bookshelf; works offline, your data stays on your device. <a href="https://akshayaa-403.github.io/notes/">app</a></sub></td>
+<td valign="top"><b><a href="https://github.com/akshayaa-403/Habita">Habita</a></b><br><sub>Sort tasks by urgency and importance, then send them straight to your phone's calendar. <a href="https://akshayaa-403.github.io/Habita/src/index.html">app</a> · <a href="https://akshayaa-403.github.io/portfolio/work/habita.html">case study</a></sub></td>
+<td valign="top"><b><a href="https://arteza.site">Arteza</a></b><br><sub>Full gallery and shop for an independent painter, now with an illustrated art journal (client work, private repo). <a href="https://arteza.site">live</a> · <a href="https://akshayaa-403.github.io/portfolio/work/arteza.html">case study</a></sub></td>
+<td valign="top"><b><a href="https://github.com/akshayaa-403/notes">notes</a></b><br><sub>Card boards, a picture calendar that tracks job applications, a pomodoro timer and a PDF bookshelf; offline-first, with encrypted sync and safe backups. <a href="https://akshayaa-403.github.io/notes/">app</a></sub></td>
 </tr>
 <tr>
 <td><b>Experiments</b></td>
-<td valign="top"><b><a href="https://github.com/akshayaa-403/anttodo">anttodo</a></b><br><sub>Ant colony optimisation over a day's tasks. <a href="https://akshayaa-403.github.io/anttodo/">demo</a></sub></td>
-<td valign="top"><b><a href="https://github.com/akshayaa-403/music-player">Harmonic Mandala</a></b><br><sub>Turns a Spotify track's tempo, key, energy and mood into six rotating wave rings that pulse with playback.</sub></td>
+<td valign="top"><b><a href="https://github.com/akshayaa-403/ant-map">ant-map</a></b><br><sub>Mumbai, Bengaluru and Delhi's rail networks, today and as planned, set against one designed by ant colony optimisation and scored like the Tokyo slime-mould study. <a href="https://akshayaa-403.github.io/ant-map/">demo</a></sub></td>
+<td valign="top"><b><a href="https://github.com/akshayaa-403/music-player">Harmonic Mandala</a></b><br><sub>Turns any Spotify track into seven rotating wave rings that pulse with playback, plus an unrolled waves view and a no-login demo. <a href="https://akshayaa-403.github.io/music-player/">app</a></sub></td>
 <td valign="top"></td>
 </tr>
 </table>

@@ -37,8 +37,10 @@ const PROJECTS = [
     url: 'https://arteza.site/', expect: 'Arteza', kind: 'site', note: 'client work' },
   { group: 'Products', name: 'notes', repo: 'notes',
     url: 'https://akshayaa-403.github.io/notes/', expect: '<title>Notes', kind: 'app' },
-  { group: 'Experiments', name: 'anttodo', repo: 'anttodo',
-    url: 'https://akshayaa-403.github.io/anttodo/', expect: 'Ant Colony', kind: 'demo' },
+  { group: 'Experiments', name: 'ant-map', repo: 'ant-map',
+    url: 'https://akshayaa-403.github.io/ant-map/', expect: '<title>Ant Colony City Networks', kind: 'demo' },
+  { group: 'Experiments', name: 'Harmonic Mandala', repo: 'music-player',
+    url: 'https://akshayaa-403.github.io/music-player/', expect: '<title>Harmonic Mandala', kind: 'app' },
 ];
 
 const THEMES = {
